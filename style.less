@@ -38,6 +38,52 @@ table {
   }
 }
 
+.landing {
+  .logo-container {
+    text-align: center;
+  }
+  h1 {
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 300;
+    text-align: center;
+  }
+  button {
+    margin: 10px auto;
+  }
+  @logo-bottom: 15px;
+  @logo-sides: 10px;
+  .logo {
+    vertical-align: middle;
+    display: inline-block;
+    margin: 25px 0;
+    position: relative;
+    .shape {
+      margin: auto;
+      height: 0;
+      border-left: @logo-sides solid transparent;
+      border-right: @logo-sides solid transparent;
+      border-bottom: @logo-bottom solid;
+      &.one {
+        width: 0;
+        border-bottom-color: #0face1;
+      }
+      &.two {
+        border-bottom-color: #ef5728;
+        width: @logo-sides * 2;
+      }
+      &.three {
+        border-bottom-color: #d2d1b3;
+        width: @logo-sides * 4;
+      }
+      &.four {
+        border-bottom-color: #363731;
+        width: @logo-sides * 6;
+      }
+    }
+  }
+}
+
 @pyramid-bottom: 48px;
 @pyramid-sides: 38px;
 .pyramid {

@@ -32,6 +32,47 @@ table {
 table .progress {
   padding-left: 15px;
 }
+.landing .logo-container {
+  text-align: center;
+}
+.landing h1 {
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: 300;
+  text-align: center;
+}
+.landing button {
+  margin: 10px auto;
+}
+.landing .logo {
+  vertical-align: middle;
+  display: inline-block;
+  margin: 25px 0;
+  position: relative;
+}
+.landing .logo .shape {
+  margin: auto;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 15px solid;
+}
+.landing .logo .shape.one {
+  width: 0;
+  border-bottom-color: #0face1;
+}
+.landing .logo .shape.two {
+  border-bottom-color: #ef5728;
+  width: 20px;
+}
+.landing .logo .shape.three {
+  border-bottom-color: #d2d1b3;
+  width: 40px;
+}
+.landing .logo .shape.four {
+  border-bottom-color: #363731;
+  width: 60px;
+}
 .pyramid {
   margin: 25px 0;
   position: relative;
