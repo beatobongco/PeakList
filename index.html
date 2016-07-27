@@ -321,14 +321,14 @@
           return requirements
         },
         doBackup: function() {
-          firebase.database().ref(btoa(app.userId)).set({
+          firebase.database().ref("users/" + app.userId).set({
             gradingSystem: app.gradingSystem,
             requirements: app.requirements,
             data: app.db().get()
           })
         },
         doRestore: function() {
-          firebase.database().ref(btoa(app.userId)).on('value', function(snapshot) {
+          firebase.database().ref("users/" + app.userId).on('value', function(snapshot) {
             var v = snapshot.val()
             app.gradingSystem = v.gradingSystem
             app.requirements = v.requirements
@@ -407,8 +407,7 @@
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         app.mode = "record"
-        app.userId = user.email
-        console.log(btoa(user.email))
+        app.userId = user.uid
         if (app.justRegistered) {
           app.doBackup()
         }
