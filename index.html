@@ -1,0 +1,258 @@
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/gridforms/1.0.10/gridforms.min.css">
+  <style type="text/css">
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="tickList" v-cloak>
+    <form
+      v-if="mode === 'setup'"
+      id="setupForm"
+      class="grid-form"
+      >
+      <fieldset>
+        <legend>What is your current onsight level?</legend>
+        <div data-row-span="1">
+          <div data-field-span="1">
+            <select name="onsightLevel">
+              <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+      <button v-on:click="doSetup">OK</button>
+    </form>
+    <form
+      v-if="mode === 'record'"
+      id="sendRecorder"
+      class="grid-form">
+      <fieldset>
+        <legend>Record a send</legend>
+        <div data-row-span="3">
+          <div data-field-span="1">
+            <label>Route name</label>
+            <input name="routeName" type="text">
+          </div>
+          <div data-field-span="1">
+            <label>Indoor or outdoor</label>
+            <select name="indoorOrOutdoor">
+              <option value="indoor">Indoor</option>
+              <option value="outdoor">Outdoor</option>
+            </select>
+          </div>
+          <div data-field-span="1">
+            <label>Grade</label>
+            <select name="grade">
+              <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Optional route data</legend>
+        <div data-row-span="4">
+          <div data-field-span="1">
+            <label>Prominent hold type</label>
+            <select name="holdType">
+              <option value="jug">Jug</option>
+              <option value="pinch">Pinch</option>
+              <option value="crimp">Crimp</option>
+              <option value="sloper">Sloper</option>
+              <option value="pocket">Pocket</option>
+              <option value="jib">Jib</option>
+              <option value="mono">Mono</option>
+            </select>
+          </div>
+          <div data-field-span="1">
+            <label>Route length</label>
+            <select name="routeLength">
+              <option value="short">Short</option>
+              <option value="medium">Medium</option>
+              <option value="long">Long</option>
+            </select>
+          </div>
+          <div data-field-span="1">
+            <label>Crux location</label>
+            <select name="cruxLocation">
+              <option value="beginning">Beginning</option>
+              <option value="middle">Middle</option>
+              <option value="end">End</option>
+            </select>
+          </div>
+          <div data-field-span="1">
+            <label>Prominent angle</label>
+            <select name="angle">
+              <option value="slab">Slab</option>
+              <option value="vertical">Vertical</option>
+              <option value="slight-overhang">Slight overhang (10-20&deg;)</option>
+              <option value="moderate-overhang">Moderate overhang (30-35&deg;)</option>
+              <option value="steep-overhang">Steep overhang (~45&deg;)</option>
+              <option value="roof">Roof</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+      <button v-on:click="recordSend">Record</button>
+    </form>
+    <div v-if="mode === 'record'">
+      <ul>
+        <li v-for="requirement in requirements">{{requirement.grade}} - {{requirement.completed || 0}} / {{requirement.required}}</li>
+      </ul>
+    </div>
+  </div>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.0/lodash.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.4.2/localforage.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/taffydb/2.7.2/taffy-min.js"></script>
+  <script type="text/javascript">
+    function debug__showValue(key) {
+      localforage.getItem(key).then(function(value) {
+        console.log(value)
+      })
+    }
+    function debug__showData() {
+      debug__showValue("sends")
+      debug__showValue("requirements")
+    }
+
+    window.onbeforeunload = function(e) {
+      var dialogText = "U SURE MAYNE?"
+      e.returnValue = dialogText
+      return dialogText
+    }
+
+    function generateGrades() {
+      // YDS
+      var g = ["5.8", "5.9"]
+      var limit = 15
+      var current = 10
+      var letters = ['a', 'b', 'c', 'd']
+      while (current !== limit + 1) {
+        for (var i = 0; i < letters.length; i++) {
+          g.push("5." + current + letters[i])
+        }
+        current++
+      }
+      return g
+    }
+
+    var app = new Vue({
+      el: '#tickList',
+      data: {
+        mode: "setup",
+        grades: [],
+        requirements: [],
+        db: null,
+      },
+      ready: function() {
+        //initialize TAFFY
+        localforage.getItem("sends").then(function(value) {
+          this.db = TAFFY(value)
+        }.bind(this))
+
+        localforage.getItem("requirements").then(function(value) {
+          if (value) {
+            this.requirements = value
+            app.checkPyramidComplete()
+            this.mode = "record"
+          }
+        }.bind(this))
+        this.grades = generateGrades()
+      },
+      methods: {
+        setItem: function(k, v) {
+          //set in both TAFFY and localforage but only get from taffy
+          var _obj = {}
+          _obj[k] = v
+          this.db.insert(_obj)
+          localforage.setItem(k, v)
+        },
+        calculatePyramid: function(onSightLevel) {
+          //initial pyramid
+          //[{grade: "5.8", required: 8}, ...]
+          var requirements = []
+          var reps = 1
+          for (var i = 4; i > 0; i--) {
+            //start at top of pyramid
+            var base = this.grades[this.grades.indexOf(onSightLevel) + i]
+            requirements.push({grade: base, required: reps})
+            reps = reps * 2
+          }
+          return requirements
+        },
+        doSetup: function(e) {
+          //todo: load stuff
+          e.preventDefault()
+          var onSightLevel = e.target.form.onsightLevel.value
+          app.setItem("onSightLevel", onSightLevel)
+          app.setItem("requirements", app.calculatePyramid(onSightLevel))
+
+          this.mode = "record"
+        },
+        checkPyramidComplete: function() {
+          var fulfilled = true
+          for (var i = 0; i < this.requirements.length; i++) {
+            var r = this.requirements[i]
+            var numComplete = this.db({grade: r.grade}).count()
+
+            r.completed = numComplete
+            this.requirements.$set(i, _.clone(r))
+            if (numComplete < r.required) {
+              fulfilled = false
+            }
+          }
+          return fulfilled
+        },
+        upgradePyramid: function() {
+          //find highest grade in req
+          var r = this.requirements
+          var g = this.grades
+
+          //New tip
+          this.requirements.unshift({
+            grade: g[g.indexOf(r[0].grade) + 1],
+            required: 1
+          })
+
+          for (var i = 1; i <= 3; i++) {
+            var increment = i === 3 ? 4 : i
+            this.requirements[i].required = this.requirements[i].required + increment
+          }
+
+          this.setItem("requirements", this.requirements)
+        },
+        recordSend: function(e) {
+          e.preventDefault()
+          var data = $('#sendRecorder').serializeArray().reduce(
+            function(obj, item) {
+              obj[item.name] = item.value
+              return obj
+            }, {})
+
+          this.db.insert(data)
+
+          localforage.getItem("sends").then(function(value) {
+            if (value) {
+              localforage.setItem("sends", value.concat(data))
+            }
+            else {
+              localforage.setItem("sends", [data])
+            }
+          })
+
+          //$('#sendRecorder')[0].reset()
+          if(app.checkPyramidComplete()) {
+            app.upgradePyramid()
+          }
+        }
+      }
+    })
+  </script>
+</body>
+</html>
