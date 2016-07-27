@@ -324,6 +324,12 @@
             app.gradingSystem = v.gradingSystem
             app.requirements = v.requirements
             app.db = TAFFY(v.data)
+            if (app.gradingSystem === "yds") {
+              app.grades = generateYds()
+            }
+            else {
+              app.grades = generateFrench()
+            }
           })
         },
         doSetup: function(e) {
