@@ -16,9 +16,17 @@
       class="grid-form"
       >
       <fieldset>
-        <legend>What is your current onsight level?</legend>
-        <div data-row-span="1">
+        <legend>Setup</legend>
+        <div data-row-span="2">
           <div data-field-span="1">
+            <label>Choose grading system</label>
+            <select v-on:change="onGradeChange" name="gradingSystem">
+              <option value="french">French</option>
+              <option value="yds">YDS</option>
+            </select>
+          </div>
+          <div data-field-span="1">
+            <label>What is your current onsight level?</label>
             <select name="onsightLevel">
               <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
             </select>
@@ -127,10 +135,9 @@
       return dialogText
     }
 
-    function generateGrades() {
-      // YDS
+    function generateYds() {
       var g = ["5.8", "5.9"]
-      var limit = 15
+      var limit = 14
       var current = 10
       var letters = ['a', 'b', 'c', 'd']
       while (current !== limit + 1) {
@@ -142,13 +149,36 @@
       return g
     }
 
+    function generateFrench() {
+      var g = ["4", "5"]
+      var limit = 8
+      var current = 6
+      var letters = ['a', 'b', 'c']
+      while (current !== limit + 1) {
+        for (var i = 0; i < letters.length; i++) {
+          g.push(current + letters[i])
+          g.push(current + letters[i] + "+")
+        }
+        current++
+      }
+      return g
+    }
+
     var app = new Vue({
       el: '#tickList',
       data: {
+        onSightLevel: null,
         mode: "setup",
         grades: [],
         requirements: [],
         db: null,
+      },
+      watch: {
+        mode: function(value) {
+          if (value === "record") {
+            app.checkPyramidComplete()
+          }
+        }
       },
       ready: function() {
         //initialize TAFFY
@@ -159,19 +189,30 @@
         localforage.getItem("requirements").then(function(value) {
           if (value) {
             this.requirements = value
-            app.checkPyramidComplete()
             this.mode = "record"
           }
         }.bind(this))
-        this.grades = generateGrades()
+        this.grades = generateFrench()
       },
       methods: {
+        debug: function() {
+          console.log(this.requirements)
+        },
+        onGradeChange: function(e) {
+          if(e.target.value === "yds") {
+            this.grades = generateYds()
+          }
+          else {
+            this.grades = generateFrench()
+          }
+        },
         setItem: function(k, v) {
           //set in both TAFFY and localforage but only get from taffy
           var _obj = {}
           _obj[k] = v
           this.db.insert(_obj)
           localforage.setItem(k, v)
+          this[k] = v
         },
         calculatePyramid: function(onSightLevel) {
           //initial pyramid
@@ -219,6 +260,7 @@
             grade: g[g.indexOf(r[0].grade) + 1],
             required: 1
           })
+          this.requirements.pop()
 
           for (var i = 1; i <= 3; i++) {
             var increment = i === 3 ? 4 : i
