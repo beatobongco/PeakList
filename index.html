@@ -1,18 +1,12 @@
 <html>
 <head>
-  <title></title>
+  <title>PeakList</title>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/gridforms/1.0.10/gridforms.min.css">
-  <style type="text/css">
-    [v-cloak] {
-      display: none;
-    }
-    fieldset {
-      margin: 25px 0 !important;
-    }
-  </style>
+  <link href='https://fonts.googleapis.com/css?family=Fira+Sans:700,400,300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <h1>TickList</h1>
   <div id="tickList" v-cloak>
     <form
       v-if="mode === 'setup'"
@@ -20,8 +14,16 @@
       class="grid-form"
       >
       <fieldset>
-        <legend>Setup</legend>
-        <div data-row-span="2">
+        <legend>PeakList Setup</legend>
+        <div data-row-span="3">
+          <div data-field-span="1">
+            <label>Choose a username</label>
+            <input type="text" name="username">
+          </div>
+          <div data-field-span="1">
+            <label>Choose a password</label>
+            <input type="text" name="password">
+          </div>
           <div data-field-span="1">
             <label>Choose grading system</label>
             <select v-on:change="onGradeChange" name="gradingSystem">
@@ -29,6 +31,8 @@
               <option value="yds">Yosemite Decimal System</option>
             </select>
           </div>
+        </div>
+        <div data-row-span="1">
           <div data-field-span="1">
             <label>What is your current onsight level?</label>
             <select name="onsightLevel">
@@ -108,13 +112,41 @@
             </select>
           </div>
         </div>
+        <div data-row-span="1">
+          <div data-field-span="1">
+            <label>Comments</label>
+            <textarea name="comments"></textarea>
+          </div>
+        </div>
       </fieldset>
       <button v-on:click="recordSend">Record</button>
     </form>
-    <div v-if="mode === 'record'">
-      <ul>
-        <li v-for="requirement in requirements">{{requirement.grade}} - {{requirement.completed || 0}} / {{requirement.required}}</li>
-      </ul>
+    <table v-if="mode === 'record'">
+      <tr v-for="requirement in requirements">
+        <td>{{requirement.grade}}</td>
+        <td class="progress">{{requirement.completed || 0}} / {{requirement.required}}</li></td>
+      </tr>
+    </table>
+    <div class="pyramid" v-if="mode === 'record'">
+      <div class="grade top">{{requirements[0].grade}}</div>
+      <div class="grade top-middle">{{requirements[1].grade}}</div>
+      <div class="grade bottom-middle">{{requirements[2].grade}}</div>
+      <div class="grade bottom">{{requirements[3].grade}}</div>
+      <div class="shape one"
+        v-if="requirements[0].completed >= 1"></div>
+      <div class="shape one" v-else style="visibility: hidden"></div>
+      <div class="shape two"
+        v-if="requirements[1].completed >= 1"
+        style="width: {{(requirements[1].completed / 2) * (pyramidSides * 2)}}px"></div>
+      <div class="shape two" v-else style="visibility: hidden"></div>
+      <div class="shape three"
+        v-if="requirements[2].completed >= 1"
+        style="width: {{(requirements[2].completed / 4) * (pyramidSides * 4)}}px"></div>
+      <div class="shape three" v-else style="visibility: hidden"></div>
+      <div class="shape four"
+        v-if="requirements[3].completed >= 1"
+        style="width: {{(requirements[3].completed / 8) * (pyramidSides * 6)}}px"></div>
+      <div class="shape four" v-else style="visibility: hidden"></div>
     </div>
   </div>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.0/lodash.min.js"></script>
@@ -122,6 +154,17 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.4.2/localforage.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/taffydb/2.7.2/taffy-min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyCKV-7rSTj_oCjcmieX6QwYcUDo3J7eElA",
+      authDomain: "ticklist-fce5a.firebaseapp.com",
+      databaseURL: "https://ticklist-fce5a.firebaseio.com",
+      storageBucket: "",
+    };
+    firebase.initializeApp(config);
+  </script>
   <script type="text/javascript">
     function debug__showValue(key) {
       localforage.getItem(key).then(function(value) {
@@ -133,11 +176,11 @@
       debug__showValue("requirements")
     }
 
-    window.onbeforeunload = function(e) {
-      var dialogText = "U SURE MAYNE?"
-      e.returnValue = dialogText
-      return dialogText
-    }
+    // window.onbeforeunload = function(e) {
+    //   var dialogText = "U SURE MAYNE?"
+    //   e.returnValue = dialogText
+    //   return dialogText
+    // }
 
     function generateYds() {
       var g = ["5.8", "5.9"]
@@ -171,6 +214,7 @@
     var app = new Vue({
       el: '#tickList',
       data: {
+        pyramidSides: 38,
         onSightLevel: null,
         mode: "setup",
         grades: [],
@@ -219,8 +263,6 @@
           this[k] = v
         },
         calculatePyramid: function(onSightLevel) {
-          //initial pyramid
-          //[{grade: "5.8", required: 8}, ...]
           var requirements = []
           var reps = 1
           for (var i = 4; i > 0; i--) {

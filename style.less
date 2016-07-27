@@ -1,0 +1,90 @@
+[v-cloak] {
+  display: none;
+}
+
+#tickList {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+body,
+input,
+textarea,
+select {
+  font-family: 'Fira Sans', sans-serif;
+}
+
+fieldset {
+  margin-bottom: 25px !important;
+}
+
+button {
+  cursor: pointer;
+  width: 100%;
+  background-color: #fff;
+  border: 3px solid black;
+  height: 50px;
+  font-size: 22px;
+  font-weight: 700;
+  &:hover {
+    opacity: .7;
+  }
+}
+
+table {
+  margin: 25px auto;
+  .progress {
+    padding-left: 15px;
+  }
+}
+
+@pyramid-bottom: 48px;
+@pyramid-sides: 38px;
+.pyramid {
+  margin: 25px 0;
+  position: relative;
+  .shape {
+    margin: auto;
+    height: 0;
+    border-left: @pyramid-sides solid transparent;
+    border-right: @pyramid-sides solid transparent;
+    border-bottom: @pyramid-bottom solid;
+    &:hover {
+      opacity: .8;
+    }
+    &.one {
+      width: 0;
+      border-bottom-color: #0face1;
+    }
+    &.two {
+      border-bottom-color: #ef5728;
+      width: @pyramid-sides * 2;
+    }
+    &.three {
+      border-bottom-color: #d2d1b3;
+      width: @pyramid-sides * 4;
+    }
+    &.four {
+      border-bottom-color: #363731;
+      width: @pyramid-sides * 6;
+    }
+  }
+  .grade {
+    position: absolute;
+    left: 50%;
+    margin-left: -10px;
+    &.top {
+      top: 12%;
+    }
+    &.top-middle {
+      top: 33%;
+    }
+    &.bottom-middle {
+      top: 58%;
+    }
+    &.bottom {
+      top: 83%;
+      color: #bdc3c7;
+    }
+  }
+}

@@ -1,0 +1,82 @@
+[v-cloak] {
+  display: none;
+}
+#tickList {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+body,
+input,
+textarea,
+select {
+  font-family: 'Fira Sans', sans-serif;
+}
+fieldset {
+  margin-bottom: 25px !important;
+}
+button {
+  cursor: pointer;
+  width: 100%;
+  background-color: #fff;
+  border: 3px solid black;
+  height: 50px;
+  font-size: 22px;
+  font-weight: 700;
+}
+button:hover {
+  opacity: .7;
+}
+table {
+  margin: 25px auto;
+}
+table .progress {
+  padding-left: 15px;
+}
+.pyramid {
+  margin: 25px 0;
+  position: relative;
+}
+.pyramid .shape {
+  margin: auto;
+  height: 0;
+  border-left: 38px solid transparent;
+  border-right: 38px solid transparent;
+  border-bottom: 48px solid;
+}
+.pyramid .shape:hover {
+  opacity: .8;
+}
+.pyramid .shape.one {
+  width: 0;
+  border-bottom-color: #0face1;
+}
+.pyramid .shape.two {
+  border-bottom-color: #ef5728;
+  width: 76px;
+}
+.pyramid .shape.three {
+  border-bottom-color: #d2d1b3;
+  width: 152px;
+}
+.pyramid .shape.four {
+  border-bottom-color: #363731;
+  width: 228px;
+}
+.pyramid .grade {
+  position: absolute;
+  left: 50%;
+  margin-left: -10px;
+}
+.pyramid .grade.top {
+  top: 12%;
+}
+.pyramid .grade.top-middle {
+  top: 33%;
+}
+.pyramid .grade.bottom-middle {
+  top: 58%;
+}
+.pyramid .grade.bottom {
+  top: 83%;
+  color: #bdc3c7;
+}
