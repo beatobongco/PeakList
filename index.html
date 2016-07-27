@@ -389,12 +389,12 @@
 
           this.db.insert(data)
 
-          //$('#sendRecorder')[0].reset()
           if(app.checkPyramidComplete()) {
             app.upgradePyramid()
           }
 
           app.doBackup()
+          $('#sendRecorder')[0].reset()
         }
       }
     })
