@@ -6,9 +6,13 @@
     [v-cloak] {
       display: none;
     }
+    fieldset {
+      margin: 25px 0 !important;
+    }
   </style>
 </head>
 <body>
+  <h1>TickList</h1>
   <div id="tickList" v-cloak>
     <form
       v-if="mode === 'setup'"
