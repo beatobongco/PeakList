@@ -33,6 +33,9 @@ table {
 table .progress {
   padding-left: 15px;
 }
+h3 {
+  text-align: center;
+}
 #setupForm button {
   margin: 10px auto;
 }
@@ -73,6 +76,9 @@ table .progress {
 }
 .landing button {
   margin: 10px auto;
+}
+.pyramid-container {
+  position: relative;
 }
 .pyramid.main {
   margin: 25px 0;

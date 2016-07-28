@@ -223,38 +223,51 @@
       </fieldset>
       <button v-on:click="recordSend">Record</button>
     </form>
-    <table v-if="mode === 'record'">
-      <tr v-for="requirement in requirements">
-        <td>{{requirement.grade}}</td>
-        <td class="progress">{{requirement.completed || 0}} / {{requirement.required}}</li></td>
-      </tr>
-    </table>
-    <div class="pyramid outline" v-if="mode === 'record'">
-      <div class="shape one"></div>
-      <div class="shape two"></div>
-      <div class="shape three"></div>
-      <div class="shape four"></div>
-    </div>
-    <div class="pyramid main" v-if="mode === 'record'">
-      <div class="grade top">{{requirements[0].grade}}</div>
-      <div class="grade top-middle">{{requirements[1].grade}}</div>
-      <div class="grade bottom-middle">{{requirements[2].grade}}</div>
-      <div class="grade bottom">{{requirements[3].grade}}</div>
-      <div class="shape one"
-        v-if="requirements[0].completed >= 1"></div>
-      <div class="shape one" v-else style="visibility: hidden"></div>
-      <div class="shape two"
-        v-if="requirements[1].completed >= 1"
-        style="width: {{(requirements[1].completed / 2) * (pyramidSides * 2)}}px"></div>
-      <div class="shape two" v-else style="visibility: hidden"></div>
-      <div class="shape three"
-        v-if="requirements[2].completed >= 1"
-        style="width: {{(requirements[2].completed / 4) * (pyramidSides * 4)}}px"></div>
-      <div class="shape three" v-else style="visibility: hidden"></div>
-      <div class="shape four"
-        v-if="requirements[3].completed >= 1"
-        style="width: {{(requirements[3].completed / 8) * (pyramidSides * 6)}}px"></div>
-      <div class="shape four" v-else style="visibility: hidden"></div>
+    <div v-if="mode === 'record'">
+      <table>
+        <tr v-for="requirement in requirements">
+          <td>{{requirement.grade}}</td>
+          <td class="progress">{{requirement.completed || 0}} / {{requirement.required}}</td>
+        </tr>
+      </table>
+      <div class="pyramid-container">
+        <div class="pyramid outline">
+          <div class="shape one"></div>
+          <div class="shape two"></div>
+          <div class="shape three"></div>
+          <div class="shape four"></div>
+        </div>
+        <div class="pyramid main">
+          <div class="grade top">{{requirements[0].grade}}</div>
+          <div class="grade top-middle">{{requirements[1].grade}}</div>
+          <div class="grade bottom-middle">{{requirements[2].grade}}</div>
+          <div class="grade bottom">{{requirements[3].grade}}</div>
+          <div class="shape one"
+            v-if="requirements[0].completed >= 1"></div>
+          <div class="shape one" v-else style="visibility: hidden"></div>
+          <div class="shape two"
+            v-if="requirements[1].completed >= 1"
+            style="width: {{(requirements[1].completed / 2) * (pyramidSides * 2)}}px"></div>
+          <div class="shape two" v-else style="visibility: hidden"></div>
+          <div class="shape three"
+            v-if="requirements[2].completed >= 1"
+            style="width: {{(requirements[2].completed / 4) * (pyramidSides * 4)}}px"></div>
+          <div class="shape three" v-else style="visibility: hidden"></div>
+          <div class="shape four"
+            v-if="requirements[3].completed >= 1"
+            style="width: {{(requirements[3].completed / 8) * (pyramidSides * 6)}}px"></div>
+          <div class="shape four" v-else style="visibility: hidden"></div>
+        </div>
+      </div>
+      <div>
+      <h3>Send log</h3>
+      <table>
+        <tr v-for="route in routes">
+          <td>{{route.routeName}}</td>
+          <td class="progress">{{route.grade}}</td>
+        </tr>
+      </table>
+      </div>
     </div>
   </div>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.0/lodash.min.js"></script>
@@ -274,12 +287,6 @@
     function debug__logout() {
       firebase.auth().signOut()
     }
-
-    // window.onbeforeunload = function(e) {
-    //   var dialogText = "Are you sure you want to quit?"
-    //   e.returnValue = dialogText
-    //   return dialogText
-    // }
 
     function generateYds() {
       var g = ["5.8", "5.9"]
@@ -332,6 +339,11 @@
         grades: [],
         requirements: [],
         db: null,
+      },
+      computed: {
+        routes: function () {
+          return _.sortBy(this.db().get(), function(o) { return o.grade })
+        }
       },
       watch: {
         mode: function(value) {
