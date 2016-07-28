@@ -226,11 +226,11 @@
       })
     }
 
-    // window.onbeforeunload = function(e) {
-    //   var dialogText = "U SURE MAYNE?"
-    //   e.returnValue = dialogText
-    //   return dialogText
-    // }
+    window.onbeforeunload = function(e) {
+      var dialogText = "Are you sure you want to quit?"
+      e.returnValue = dialogText
+      return dialogText
+    }
 
     function generateYds() {
       var g = ["5.8", "5.9"]
