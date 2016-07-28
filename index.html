@@ -14,7 +14,7 @@
 </head>
 <body>
   <div id="tickList" v-cloak>
-    <div v-if="mode === 'landing' || 'login'"
+    <div v-if="mode === 'landing' || mode === 'login'"
       class="landing">
       <div class="logo-container">
         <div class="logo">
@@ -182,7 +182,13 @@
         <td class="progress">{{requirement.completed || 0}} / {{requirement.required}}</li></td>
       </tr>
     </table>
-    <div class="pyramid" v-if="mode === 'record'">
+    <div class="pyramid outline" v-if="mode === 'record'">
+      <div class="shape one"></div>
+      <div class="shape two"></div>
+      <div class="shape three"></div>
+      <div class="shape four"></div>
+    </div>
+    <div class="pyramid main" v-if="mode === 'record'">
       <div class="grade top">{{requirements[0].grade}}</div>
       <div class="grade top-middle">{{requirements[1].grade}}</div>
       <div class="grade bottom-middle">{{requirements[2].grade}}</div>
@@ -222,11 +228,11 @@
       firebase.auth().signOut()
     }
 
-    window.onbeforeunload = function(e) {
-      var dialogText = "Are you sure you want to quit?"
-      e.returnValue = dialogText
-      return dialogText
-    }
+    // window.onbeforeunload = function(e) {
+    //   var dialogText = "Are you sure you want to quit?"
+    //   e.returnValue = dialogText
+    //   return dialogText
+    // }
 
     function generateYds() {
       var g = ["5.8", "5.9"]

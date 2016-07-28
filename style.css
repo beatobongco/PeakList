@@ -4,6 +4,7 @@
 #tickList {
   max-width: 1024px;
   margin: 0 auto;
+  position: relative;
 }
 body,
 input,
@@ -37,90 +38,119 @@ table .progress {
 }
 .landing .logo-container {
   text-align: center;
+  margin: 25px 0;
 }
-.landing h1 {
-  display: inline-block;
-  vertical-align: middle;
+.landing .logo-container h1 {
+  margin: 0;
   font-weight: 300;
   text-align: center;
 }
-.landing button {
-  margin: 10px auto;
-}
-.landing .logo {
-  vertical-align: middle;
-  display: inline-block;
-  margin: 25px 0;
+.landing .logo-container .logo {
   position: relative;
 }
-.landing .logo .shape {
+.landing .logo-container .logo .shape {
   margin: auto;
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-bottom: 15px solid;
 }
-.landing .logo .shape.one {
+.landing .logo-container .logo .shape.one {
   width: 0;
   border-bottom-color: #0face1;
 }
-.landing .logo .shape.two {
+.landing .logo-container .logo .shape.two {
   border-bottom-color: #ef5728;
   width: 20px;
 }
-.landing .logo .shape.three {
+.landing .logo-container .logo .shape.three {
   border-bottom-color: #d2d1b3;
   width: 40px;
 }
-.landing .logo .shape.four {
+.landing .logo-container .logo .shape.four {
   border-bottom-color: #363731;
   width: 60px;
 }
-.pyramid {
+.landing button {
+  margin: 10px auto;
+}
+.pyramid.main {
   margin: 25px 0;
   position: relative;
 }
-.pyramid .shape {
+.pyramid.main .shape {
   margin: auto;
   height: 0;
   border-left: 38px solid transparent;
   border-right: 38px solid transparent;
   border-bottom: 48px solid;
+  z-index: 100;
 }
-.pyramid .shape:hover {
+.pyramid.main .shape:hover {
   opacity: .8;
 }
-.pyramid .shape.one {
+.pyramid.main .shape.one {
   width: 0;
   border-bottom-color: #0face1;
 }
-.pyramid .shape.two {
+.pyramid.main .shape.two {
   border-bottom-color: #ef5728;
   width: 76px;
 }
-.pyramid .shape.three {
+.pyramid.main .shape.three {
   border-bottom-color: #d2d1b3;
   width: 152px;
 }
-.pyramid .shape.four {
+.pyramid.main .shape.four {
   border-bottom-color: #363731;
   width: 228px;
 }
-.pyramid .grade {
+.pyramid.main .grade {
+  color: #fff;
+  z-index: 101;
   position: absolute;
   left: 50%;
   margin-left: -10px;
 }
-.pyramid .grade.top {
+.pyramid.main .grade.top {
   top: 12%;
 }
-.pyramid .grade.top-middle {
+.pyramid.main .grade.top-middle {
   top: 33%;
 }
-.pyramid .grade.bottom-middle {
+.pyramid.main .grade.bottom-middle {
   top: 58%;
 }
-.pyramid .grade.bottom {
+.pyramid.main .grade.bottom {
   top: 83%;
-  color: #bdc3c7;
+}
+.pyramid.outline {
+  position: absolute;
+  width: 100%;
+  margin: 25px auto;
+  z-index: 0;
+  bottom: -25px;
+}
+.pyramid.outline .shape {
+  margin: auto;
+  height: 0;
+  border-left: 38px solid transparent;
+  border-right: 38px solid transparent;
+  border-bottom: 48px solid #000000;
+  z-index: 99;
+}
+.pyramid.outline .shape:hover {
+  opacity: .8;
+}
+.pyramid.outline .shape.one {
+  width: 0;
+}
+.pyramid.outline .shape.two {
+  width: 76px;
+}
+.pyramid.outline .shape.three {
+  width: 152px;
+}
+.pyramid.outline .shape.four {
+  width: 228px;
 }

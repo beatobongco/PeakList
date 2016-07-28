@@ -5,6 +5,7 @@
 #tickList {
   max-width: 1024px;
   margin: 0 auto;
+  position: relative;
 }
 
 body,
@@ -47,96 +48,128 @@ table {
 .landing {
   .logo-container {
     text-align: center;
-  }
-  h1 {
-    display: inline-block;
-    vertical-align: middle;
-    font-weight: 300;
-    text-align: center;
+    margin: 25px 0;
+    h1 {
+      margin: 0;
+      font-weight: 300;
+      text-align: center;
+    }
+    @logo-bottom: 15px;
+    @logo-sides: 10px;
+    .logo {
+      position: relative;
+      .shape {
+        margin: auto;
+        height: 0;
+        border-left: @logo-sides solid transparent;
+        border-right: @logo-sides solid transparent;
+        border-bottom: @logo-bottom solid;
+        &.one {
+          width: 0;
+          border-bottom-color: #0face1;
+        }
+        &.two {
+          border-bottom-color: #ef5728;
+          width: @logo-sides * 2;
+        }
+        &.three {
+          border-bottom-color: #d2d1b3;
+          width: @logo-sides * 4;
+        }
+        &.four {
+          border-bottom-color: #363731;
+          width: @logo-sides * 6;
+        }
+      }
+    }
   }
   button {
     margin: 10px auto;
-  }
-  @logo-bottom: 15px;
-  @logo-sides: 10px;
-  .logo {
-    vertical-align: middle;
-    display: inline-block;
-    margin: 25px 0;
-    position: relative;
-    .shape {
-      margin: auto;
-      height: 0;
-      border-left: @logo-sides solid transparent;
-      border-right: @logo-sides solid transparent;
-      border-bottom: @logo-bottom solid;
-      &.one {
-        width: 0;
-        border-bottom-color: #0face1;
-      }
-      &.two {
-        border-bottom-color: #ef5728;
-        width: @logo-sides * 2;
-      }
-      &.three {
-        border-bottom-color: #d2d1b3;
-        width: @logo-sides * 4;
-      }
-      &.four {
-        border-bottom-color: #363731;
-        width: @logo-sides * 6;
-      }
-    }
   }
 }
 
 @pyramid-bottom: 48px;
 @pyramid-sides: 38px;
 .pyramid {
-  margin: 25px 0;
-  position: relative;
-  .shape {
-    margin: auto;
-    height: 0;
-    border-left: @pyramid-sides solid transparent;
-    border-right: @pyramid-sides solid transparent;
-    border-bottom: @pyramid-bottom solid;
-    &:hover {
-      opacity: .8;
+  &.main {
+    margin: 25px 0;
+    position: relative;
+    .shape {
+      margin: auto;
+      height: 0;
+      border-left: @pyramid-sides solid transparent;
+      border-right: @pyramid-sides solid transparent;
+      border-bottom: @pyramid-bottom solid;
+      z-index: 100;
+      &:hover {
+        opacity: .8;
+      }
+      &.one {
+        width: 0;
+        border-bottom-color: #0face1;
+      }
+      &.two {
+        border-bottom-color: #ef5728;
+        width: @pyramid-sides * 2;
+      }
+      &.three {
+        border-bottom-color: #d2d1b3;
+        width: @pyramid-sides * 4;
+      }
+      &.four {
+        border-bottom-color: #363731;
+        width: @pyramid-sides * 6;
+      }
     }
-    &.one {
-      width: 0;
-      border-bottom-color: #0face1;
-    }
-    &.two {
-      border-bottom-color: #ef5728;
-      width: @pyramid-sides * 2;
-    }
-    &.three {
-      border-bottom-color: #d2d1b3;
-      width: @pyramid-sides * 4;
-    }
-    &.four {
-      border-bottom-color: #363731;
-      width: @pyramid-sides * 6;
+    .grade {
+      color: #fff;
+      z-index: 101;
+      position: absolute;
+      left: 50%;
+      margin-left: -10px;
+      &.top {
+        top: 12%;
+      }
+      &.top-middle {
+        top: 33%;
+      }
+      &.bottom-middle {
+        top: 58%;
+      }
+      &.bottom {
+        top: 83%;
+        //color: #bdc3c7;
+      }
     }
   }
-  .grade {
+  &.outline {
     position: absolute;
-    left: 50%;
-    margin-left: -10px;
-    &.top {
-      top: 12%;
-    }
-    &.top-middle {
-      top: 33%;
-    }
-    &.bottom-middle {
-      top: 58%;
-    }
-    &.bottom {
-      top: 83%;
-      color: #bdc3c7;
+    width: 100%;
+    margin: 25px auto;
+    z-index: 0;
+    bottom: -25px;
+    .shape {
+      margin: auto;
+      height: 0;
+      border-left: @pyramid-sides solid transparent;
+      border-right: @pyramid-sides solid transparent;
+      border-bottom: @pyramid-bottom solid black;
+      z-index: 99;
+      &:hover {
+        opacity: .8;
+      }
+      &.one {
+        width: 0;
+      }
+      &.two {
+        width: @pyramid-sides * 2;
+      }
+      &.three {
+        width: @pyramid-sides * 4;
+      }
+      &.four {
+        width: @pyramid-sides * 6;
+      }
     }
   }
 }
