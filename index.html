@@ -92,23 +92,33 @@
       id="sendRecorder"
       class="grid-form">
       <fieldset>
-        <legend>Record a send</legend>
-        <div data-row-span="4">
+        <legend>Send a route</legend>
+        <div data-row-span="1">
           <div data-field-span="1">
             <label>Route name</label>
             <input name="routeName" type="text">
+          </div>
+        </div>
+        <div data-row-span="4">
+          <div data-field-span="1">
+            <label>Grade</label>
+            <select name="grade">
+              <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
+            </select>
+          </div>
+          <div data-field-span="1">
+            <label>Route work</label>
+            <select name="routeWork">
+              <option value="redpoint">Redpoint</option>
+              <option value="flash">Flash</option>
+              <option value="onsight">On-sight</option>
+            </select>
           </div>
           <div data-field-span="1">
             <label>Indoor or outdoor</label>
             <select name="indoorOrOutdoor">
               <option value="indoor">Indoor</option>
               <option value="outdoor">Outdoor</option>
-            </select>
-          </div>
-          <div data-field-span="1">
-            <label>Grade</label>
-            <select name="grade">
-              <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
             </select>
           </div>
           <div data-field-span="1">
