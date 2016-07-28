@@ -87,7 +87,7 @@
       class="grid-form">
       <fieldset>
         <legend>Record a send</legend>
-        <div data-row-span="3">
+        <div data-row-span="4">
           <div data-field-span="1">
             <label>Route name</label>
             <input name="routeName" type="text">
@@ -103,6 +103,13 @@
             <label>Grade</label>
             <select name="grade">
               <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
+            </select>
+          </div>
+          <div data-field-span="1">
+            <label>Top rope or lead</label>
+            <select name="topRopeOrLead">
+              <option value="toprope">Top rope</option>
+              <option value="lead">Lead</option>
             </select>
           </div>
         </div>
