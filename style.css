@@ -36,6 +36,10 @@ table .progress {
 h3 {
   text-align: center;
 }
+.canvas-container {
+  width: 320px;
+  margin: auto;
+}
 #setupForm button {
   margin: 10px auto;
 }
@@ -76,6 +80,13 @@ h3 {
 }
 .landing button {
   margin: 10px auto;
+}
+.mid {
+  text-align: center;
+  font-weight: 300;
+}
+.mid.title {
+  font-weight: 600;
 }
 .pyramid-container {
   position: relative;

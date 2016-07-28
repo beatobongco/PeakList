@@ -169,12 +169,7 @@
             <label>Prominent angle</label>
             <select name="angle">
               <option value="">Select angle</option>
-              <option value="slab">Slab</option>
-              <option value="vertical">Vertical</option>
-              <option value="slight-overhang">Slight overhang (10-20&deg;)</option>
-              <option value="moderate-overhang">Moderate overhang (30-35&deg;)</option>
-              <option value="steep-overhang">Steep overhang (~45&deg;)</option>
-              <option value="roof">Roof</option>
+              <option v-for="angle in angles" value="{{ angle.id}}">{{angle.displayName}}</option>
             </select>
           </div>
         </div>
@@ -259,17 +254,21 @@
           <div class="shape four" v-else style="visibility: hidden"></div>
         </div>
       </div>
-      <div>
-      <h3>Send log</h3>
+      <p class="mid title">STATS (STRIVE FOR BALANCE)</p>
+      <p class="mid">ANGLE</p>
+      <div class="canvas-container">
+        <canvas id="doughnut"></canvas>
+      </div>
+      <p class="mid title">SENT ROUTES</p>
       <table>
         <tr v-for="route in routes">
-          <td>{{route.routeName}}</td>
-          <td class="progress">{{route.grade}}</td>
+          <td>{{route.grade}}</td>
+          <td class="progress">{{route.routeName}}</td>
         </tr>
       </table>
-      </div>
     </div>
   </div>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.0/lodash.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -343,6 +342,16 @@
       computed: {
         routes: function () {
           return _.sortBy(this.db().get(), function(o) { return o.grade })
+        },
+        angles: function() {
+          return [
+            {id: "slab", statName: "SLAB", displayName: "Slab"},
+            {id: "vertical", statName: "VERT", displayName: "Vertical"},
+            {id: "slight-overhang", statName: "SLGT", displayName: "Slight overhang (10-20&deg;)"},
+            {id: "moderate-overhang", statName: "MODR", displayName: "Moderate overhang (30-35&deg;)"},
+            {id: "steep-overhang", statName: "STEE", displayName: "Heavy overhang (~45&deg;)"},
+            {id: "roof", statName: "ROF", displayName: "Roof"}
+          ]
         }
       },
       watch: {
@@ -407,6 +416,7 @@
             else {
               app.grades = generateFrench()
             }
+            app.calculateStats()
           })
         },
         doSetup: function(e) {
@@ -433,6 +443,35 @@
             }
           }
           return fulfilled
+        },
+        calculateStats: function() {
+          app.db().distinct()
+          var labels = _(app.angles).map(a => a.statName).value()
+          var ids = _(app.angles).map(a => a.id).value()
+          var data = []
+          for (var i = 0; i < ids.length; i++) {
+            console.log(ids[i])
+            data.push(app.db({angle: ids[i]}).count())
+          }
+          var myDoughnutChart = new Chart(document.getElementById("doughnut"), {
+            type: 'doughnut',
+            data: {
+              labels: labels,
+              datasets: [
+              {
+                data: data,
+                backgroundColor: [
+                  "#0face1",
+                  "#ef5728",
+                  "#d2d1b3",
+                  "#363731",
+                  "#fcea24",
+                  "#e2e2e2"
+                ]
+              }]
+            },
+            options: {},
+          })
         },
         upgradePyramid: function() {
           //find highest grade in req
@@ -465,7 +504,7 @@
           if(app.checkPyramidComplete()) {
             app.upgradePyramid()
           }
-
+          app.calculateStats()
           app.doBackup()
           $('#sendRecorder')[0].reset()
         }
