@@ -1,10 +1,16 @@
 <html>
 <head>
   <title>PeakList Climb Tracker - beatobongco.com</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="PeakList Climb Tracker" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="http://beatobongco.com/PeakList/" />
+  <meta property="og:image" content="http://beatobongco.com/PeakList/img/og_image.png" />
+  <meta property="og:description" content="A minimalist app that records data about the routes you send and progressively recommends grades to try next." />
+  <meta name="description" content="A minimalist app that records data about the routes you send and progressively recommends grades to try next.">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/gridforms/1.0.10/gridforms.min.css">
   <link href='https://fonts.googleapis.com/css?family=Fira+Sans:700,400,300' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
   <div id="tickList" v-cloak>
@@ -205,25 +211,15 @@
   <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
   <script type="text/javascript">
+    //initialize fastclick
     if ('addEventListener' in document) {
       document.addEventListener('DOMContentLoaded', function() {
         FastClick.attach(document.body);
       }, false);
     }
+
     function debug__logout() {
       firebase.auth().signOut()
-    }
-
-    function debug__showData() {
-      debug__showValue("sends")
-      debug__showValue("requirements")
-    }
-
-    function debug__restore() {
-      firebase.database().ref(btoa(app.userId)).on('value', function(snapshot) {
-        console.log(snapshot.val().data)
-        app.db = TAFFY(snapshot.val().data)
-      })
     }
 
     window.onbeforeunload = function(e) {
