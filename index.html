@@ -267,6 +267,15 @@
         </tr>
       </table>
     </div>
+    <div v-if="mode === 'loading'" class="loading-container">
+      <div class="sk-folding-cube">
+        <div class="sk-cube1 sk-cube"></div>
+        <div class="sk-cube2 sk-cube"></div>
+        <div class="sk-cube4 sk-cube"></div>
+        <div class="sk-cube3 sk-cube"></div>
+      </div>
+      <h2>LOADING...</h2>
+    </div>
   </div>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.0/lodash.min.js"></script>
@@ -350,7 +359,7 @@
             {id: "slight-overhang", statName: "SLGT", displayName: "Slight overhang (10-20&deg;)"},
             {id: "moderate-overhang", statName: "MODR", displayName: "Moderate overhang (30-35&deg;)"},
             {id: "steep-overhang", statName: "STEE", displayName: "Heavy overhang (~45&deg;)"},
-            {id: "roof", statName: "ROF", displayName: "Roof"}
+            {id: "roof", statName: "ROOF", displayName: "Roof"}
           ]
         }
       },
@@ -416,6 +425,8 @@
             else {
               app.grades = generateFrench()
             }
+            app.mode = "record"
+          }).then(function() {
             app.calculateStats()
           })
         },
@@ -445,6 +456,7 @@
           return fulfilled
         },
         calculateStats: function() {
+          console.log("Calculating stats")
           app.db().distinct()
           var labels = _(app.angles).map(a => a.statName).value()
           var ids = _(app.angles).map(a => a.id).value()
@@ -513,9 +525,10 @@
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        app.mode = "record"
+        app.mode = "loading"
         app.userId = user.uid
         if (app.justRegistered) {
+          app.mode = "record"
           app.doBackup()
         }
         else {
