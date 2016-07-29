@@ -367,6 +367,7 @@
         mode: function(value) {
           if (value === "record") {
             app.checkPyramidComplete()
+            app.calculateStats()
           }
         }
       },
@@ -426,8 +427,6 @@
               app.grades = generateFrench()
             }
             app.mode = "record"
-          }).then(function() {
-            app.calculateStats()
           })
         },
         doSetup: function(e) {
@@ -456,13 +455,11 @@
           return fulfilled
         },
         calculateStats: function() {
-          console.log("Calculating stats")
           app.db().distinct()
           var labels = _(app.angles).map(a => a.statName).value()
           var ids = _(app.angles).map(a => a.id).value()
           var data = []
           for (var i = 0; i < ids.length; i++) {
-            console.log(ids[i])
             data.push(app.db({angle: ids[i]}).count())
           }
           var myDoughnutChart = new Chart(document.getElementById("doughnut"), {
