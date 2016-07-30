@@ -53,6 +53,7 @@ var database = firebase.database()
 var app = new Vue({
   el: '#tickList',
   data: {
+    email: null,
     isConnected: true,
     justRegistered: false,
     userId: null,
@@ -79,12 +80,6 @@ var app = new Vue({
     }
   },
   watch: {
-    mode: function(value) {
-      if (value === "record") {
-        app.checkPyramidComplete()
-        app.calculateStats()
-      }
-    },
     isConnected: function(value) {
       //only back up on reconnect and only if db is not empty
       console.log(app.db().get().length)
@@ -149,6 +144,8 @@ var app = new Vue({
         console.log(v)
         app.db = TAFFY(v.data)
         app.requirements = v.requirements
+        app.checkPyramidComplete()
+        app.calculateStats()
 
         // for first time
         if (!app.gradingSystem) {
@@ -168,7 +165,6 @@ var app = new Vue({
           app.isConnected = false
         }
       })
-      app.mode = "record"
     },
     doBackup: function() {
       if (app.isConnected) {
@@ -187,9 +183,8 @@ var app = new Vue({
       firebase.auth().createUserWithEmailAndPassword(e.target.form.username.value, e.target.form.password.value).catch(function(error) {
         alert(error.message)
       })
-      var onSightLevel = e.target.form.onsightLevel.value
       app.gradingSystem = e.target.form.gradingSystem.value
-      app.requirements = app.calculatePyramid(onSightLevel)
+      app.requirements = app.calculatePyramid(e.target.form.onsightLevel.value)
       app.justRegistered = true
     },
     checkPyramidComplete: function() {
@@ -281,13 +276,15 @@ var app = new Vue({
 })
 
 firebase.auth().onAuthStateChanged(function(user) {
+  app.mode = "loading"
   if (user) {
-    app.mode = "loading"
     app.userId = user.uid
+    app.email = user.email
     if (app.justRegistered) {
       app.doBackup()
     }
     app.firebaseListen()
+    app.mode = "record"
   }
   else {
     app.mode = "landing"

@@ -90,6 +90,7 @@
     </form>
     <div v-if="mode === 'record'">
       <p class="conn-stat">
+        <span>{{ email }} | </span>
         <span>Status:</span>
         <span v-if="isConnected" class="online">online</span>
         <span v-if="!isConnected" class="offline">offline</span>
