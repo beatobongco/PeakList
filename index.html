@@ -89,8 +89,11 @@
       <button v-on:click="changeMode('landing', $event)">Back</button>
     </form>
     <div v-if="mode === 'record'">
-      <p id="connStat" v-if="isConnected">Status: online</p>
-      <p id="connStat" v-if="!isConnected">Status: offline</p>
+      <p class="conn-stat">
+        <span>Status:</span>
+        <span v-if="isConnected" class="online">online</span>
+        <span v-if="!isConnected" class="offline">offline</span>
+      </p>
       <a v-on:click="logout($event)" class="logout" href="#">Logout</a>
       <form id="sendRecorder" class="grid-form">
         <fieldset>

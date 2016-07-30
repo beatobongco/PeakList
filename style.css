@@ -81,6 +81,17 @@ h3 {
 .landing button {
   margin: 10px auto;
 }
+.conn-stat {
+  text-align: center;
+  font-weight: 400;
+  font-size: 12px;
+}
+.conn-stat .offline {
+  color: #c0392b;
+}
+.conn-stat .online {
+  color: #2cc36b;
+}
 .logout {
   display: block;
   text-decoration: none;
