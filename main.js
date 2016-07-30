@@ -182,6 +182,7 @@ var app = new Vue({
       e.preventDefault()
       firebase.auth().createUserWithEmailAndPassword(e.target.form.username.value, e.target.form.password.value).catch(function(error) {
         alert(error.message)
+        e.target.disabled = false
       })
       app.gradingSystem = e.target.form.gradingSystem.value
       app.requirements = app.calculatePyramid(e.target.form.onsightLevel.value)
