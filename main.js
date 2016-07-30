@@ -82,8 +82,7 @@ var app = new Vue({
   watch: {
     isConnected: function(value) {
       //only back up on reconnect and only if db is not empty
-      console.log(app.db().get().length)
-      if (value === true && app.db().get().length > 0) {
+      if (value === true && app.db && app.db().get().length > 0) {
         app.doBackup()
       }
     }
@@ -144,7 +143,6 @@ var app = new Vue({
         console.log(v)
         app.db = TAFFY(v.data)
         app.requirements = v.requirements
-        app.checkPyramidComplete()
         app.calculateStats()
 
         // for first time
@@ -214,9 +212,9 @@ var app = new Vue({
           shouldShow = true
         }
       }
-
-      if (shouldShow) {
-        var myDoughnutChart = new Chart(document.getElementById("doughnut"), {
+      var ctx = document.getElementById("doughnut")
+      if (shouldShow && ctx) {
+        var myDoughnutChart = new Chart(ctx, {
           type: 'doughnut',
           data: {
             labels: labels,
@@ -284,8 +282,8 @@ firebase.auth().onAuthStateChanged(function(user) {
     if (app.justRegistered) {
       app.doBackup()
     }
-    app.firebaseListen()
     app.mode = "record"
+    app.firebaseListen()
   }
   else {
     app.mode = "landing"
