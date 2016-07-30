@@ -81,6 +81,16 @@ h3 {
 .landing button {
   margin: 10px auto;
 }
+.logout {
+  display: block;
+  text-decoration: none;
+  color: black;
+  border: 2px solid black;
+  width: 75px;
+  text-align: center;
+  padding: 5px 0;
+  margin-left: auto;
+}
 .mid {
   text-align: center;
   font-weight: 300;

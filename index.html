@@ -48,7 +48,7 @@
             </div>
           </div>
         </fieldset>
-        <button type="submit" v-on:click="doLogin">Login</button>
+        <button type="submit" v-on:click="doLogin($event)">Login</button>
         <button v-on:click="changeMode('landing', $event)">Back</button>
       </form>
     </div>
@@ -85,142 +85,140 @@
           </div>
         </div>
       </fieldset>
-      <button type="submit" v-on:click="doSetup">Signup</button>
+      <button type="submit" v-on:click="doSetup($event)">Signup</button>
       <button v-on:click="changeMode('landing', $event)">Back</button>
     </form>
-    <form
-      v-if="mode === 'record'"
-      id="sendRecorder"
-      class="grid-form">
-      <fieldset>
-        <legend>Send a route</legend>
-        <div data-row-span="1">
-          <div data-field-span="1">
-            <label>Route name</label>
-            <input name="routeName" type="text">
-          </div>
-        </div>
-        <div data-row-span="4">
-          <div data-field-span="1">
-            <label>Grade</label>
-            <select name="grade">
-              <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
-            </select>
-          </div>
-          <div data-field-span="1">
-            <label>Route work</label>
-            <select name="routeWork">
-              <option value="redpoint">Redpoint</option>
-              <option value="flash">Flash</option>
-              <option value="onsight">On-sight</option>
-            </select>
-          </div>
-          <div data-field-span="1">
-            <label>Indoor or outdoor</label>
-            <select name="indoorOrOutdoor">
-              <option value="indoor">Indoor</option>
-              <option value="outdoor">Outdoor</option>
-            </select>
-          </div>
-          <div data-field-span="1">
-            <label>Top rope or lead</label>
-            <select name="topRopeOrLead">
-              <option value="toprope">Top rope</option>
-              <option value="lead">Lead</option>
-            </select>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>Optional route data</legend>
-        <div data-row-span="4">
-          <div data-field-span="1">
-            <label>Prominent hold type</label>
-            <select name="holdType">
-              <option value="">Select type</option>
-              <option value="crimp">Crimp</option>
-              <option value="jib">Jib</option>
-              <option value="jug">Jug</option>
-              <option value="mono">Mono</option>
-              <option value="pinch">Pinch</option>
-              <option value="pocket">Pocket</option>
-              <option value="sidepull">Sidepull</option>
-              <option value="sloper">Sloper</option>
-              <option value="undercling">Undercling</option>
-            </select>
-          </div>
-          <div data-field-span="1">
-            <label>Route length</label>
-            <select name="routeLength">
-              <option value="">Select length</option>
-              <option value="short">Short</option>
-              <option value="medium">Medium</option>
-              <option value="long">Long</option>
-            </select>
-          </div>
-          <div data-field-span="1">
-            <label>Crux location</label>
-            <select name="cruxLocation">
-              <option value="">Select location</option>
-              <option value="beginning">Beginning</option>
-              <option value="middle">Middle</option>
-              <option value="end">End</option>
-            </select>
-          </div>
-          <div data-field-span="1">
-            <label>Prominent angle</label>
-            <select name="angle">
-              <option value="">Select angle</option>
-              <option v-for="angle in angles" value="{{ angle.id}}">{{{angle.displayName}}}</option>
-            </select>
-          </div>
-        </div>
-        <div data-row-span="1">
-          <div data-field-span="1">
-            <label>Prominent technique</label>
-            <select name="technique">
-              <option value="">Select technique</option>
-              <option value="armbar">Arm bar</option>
-              <option value="balance">Balance</option>
-              <option value="backstep">Back step</option>
-              <option value="bump">Bump</option>
-              <option value="campus">Campus</option>
-              <option value="chestjam">Chest Jam</option>
-              <option value="chickenwing">Chicken Wing</option>
-              <option value="compression">Compression</option>
-              <option value="deadpoint">Deadpoint</option>
-              <option value="dropknee">Drop Knee</option>
-              <option value="dyno">Dyno</option>
-              <option value="figurefour">Figure Four</option>
-              <option value="fistjam">Fist Jam</option>
-              <option value="flag">Flag</option>
-              <option value="footjam">Foot Jam</option>
-              <option value="footwork">Footwork</option>
-              <option value="gaston">Gaston</option>
-              <option value="handjam">Hand Jam</option>
-              <option value="heelhook">Heel Hook</option>
-              <option value="heeltoe">Heel-toe Cam</option>
-              <option value="highstep">High Step</option>
-              <option value="lockoff">Lock-off</option>
-              <option value="mantle">Mantle</option>
-              <option value="reach">Reach</option>
-              <option value="rockover">Rockover</option>
-              <option value="smear">Smear</option>
-              <option value="stem">Stem</option>
-              <option value="toehook">Toe Hook</option>
-            </select>
-          </div>
-        </div>
-        <div data-row-span="1">
-          <div data-field-span="1">
-            <label>Comments</label>
-            <textarea name="comments"></textarea>
-          </div>
-        </div>
-      </fieldset>
-      <button v-on:click="recordSend">Record</button>
-    </form>
     <div v-if="mode === 'record'">
+      <a v-on:click="logout($event)" class="logout" href="#">Logout</a>
+      <form id="sendRecorder" class="grid-form">
+        <fieldset>
+          <legend>Send a route</legend>
+          <div data-row-span="1">
+            <div data-field-span="1">
+              <label>Route name</label>
+              <input name="routeName" type="text">
+            </div>
+          </div>
+          <div data-row-span="4">
+            <div data-field-span="1">
+              <label>Grade</label>
+              <select name="grade">
+                <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
+              </select>
+            </div>
+            <div data-field-span="1">
+              <label>Route work</label>
+              <select name="routeWork">
+                <option value="redpoint">Redpoint</option>
+                <option value="flash">Flash</option>
+                <option value="onsight">On-sight</option>
+              </select>
+            </div>
+            <div data-field-span="1">
+              <label>Indoor or outdoor</label>
+              <select name="indoorOrOutdoor">
+                <option value="indoor">Indoor</option>
+                <option value="outdoor">Outdoor</option>
+              </select>
+            </div>
+            <div data-field-span="1">
+              <label>Top rope or lead</label>
+              <select name="topRopeOrLead">
+                <option value="toprope">Top rope</option>
+                <option value="lead">Lead</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Optional route data</legend>
+          <div data-row-span="4">
+            <div data-field-span="1">
+              <label>Prominent hold type</label>
+              <select name="holdType">
+                <option value="">Select type</option>
+                <option value="crimp">Crimp</option>
+                <option value="jib">Jib</option>
+                <option value="jug">Jug</option>
+                <option value="mono">Mono</option>
+                <option value="pinch">Pinch</option>
+                <option value="pocket">Pocket</option>
+                <option value="sidepull">Sidepull</option>
+                <option value="sloper">Sloper</option>
+                <option value="undercling">Undercling</option>
+              </select>
+            </div>
+            <div data-field-span="1">
+              <label>Route length</label>
+              <select name="routeLength">
+                <option value="">Select length</option>
+                <option value="short">Short</option>
+                <option value="medium">Medium</option>
+                <option value="long">Long</option>
+              </select>
+            </div>
+            <div data-field-span="1">
+              <label>Crux location</label>
+              <select name="cruxLocation">
+                <option value="">Select location</option>
+                <option value="beginning">Beginning</option>
+                <option value="middle">Middle</option>
+                <option value="end">End</option>
+              </select>
+            </div>
+            <div data-field-span="1">
+              <label>Prominent angle</label>
+              <select name="angle">
+                <option value="">Select angle</option>
+                <option v-for="angle in angles" value="{{ angle.id}}">{{{angle.displayName}}}</option>
+              </select>
+            </div>
+          </div>
+          <div data-row-span="1">
+            <div data-field-span="1">
+              <label>Prominent technique</label>
+              <select name="technique">
+                <option value="">Select technique</option>
+                <option value="armbar">Arm bar</option>
+                <option value="balance">Balance</option>
+                <option value="backstep">Back step</option>
+                <option value="bump">Bump</option>
+                <option value="campus">Campus</option>
+                <option value="chestjam">Chest Jam</option>
+                <option value="chickenwing">Chicken Wing</option>
+                <option value="compression">Compression</option>
+                <option value="deadpoint">Deadpoint</option>
+                <option value="dropknee">Drop Knee</option>
+                <option value="dyno">Dyno</option>
+                <option value="figurefour">Figure Four</option>
+                <option value="fistjam">Fist Jam</option>
+                <option value="flag">Flag</option>
+                <option value="footjam">Foot Jam</option>
+                <option value="footwork">Footwork</option>
+                <option value="gaston">Gaston</option>
+                <option value="handjam">Hand Jam</option>
+                <option value="heelhook">Heel Hook</option>
+                <option value="heeltoe">Heel-toe Cam</option>
+                <option value="highstep">High Step</option>
+                <option value="lockoff">Lock-off</option>
+                <option value="mantle">Mantle</option>
+                <option value="reach">Reach</option>
+                <option value="rockover">Rockover</option>
+                <option value="smear">Smear</option>
+                <option value="stem">Stem</option>
+                <option value="toehook">Toe Hook</option>
+              </select>
+            </div>
+          </div>
+          <div data-row-span="1">
+            <div data-field-span="1">
+              <label>Comments</label>
+              <textarea name="comments"></textarea>
+            </div>
+          </div>
+        </fieldset>
+        <button v-on:click="recordSend">Record</button>
+      </form>
       <p class="mid title">ROUTE PYRAMID</p>
       <div class="pyramid-container">
         <div class="pyramid outline">
@@ -257,18 +255,20 @@
           <td class="progress">{{requirement.completed || 0}} / {{requirement.required}}</td>
         </tr>
       </table>
-      <p class="mid title">STATS (STRIVE FOR BALANCE)</p>
-      <p class="mid">ANGLE</p>
-      <div class="canvas-container">
-        <canvas id="doughnut"></canvas>
+      <div v-if="routes.length > 0">
+        <p class="mid title">STATS (STRIVE FOR BALANCE)</p>
+        <p class="mid">ANGLE</p>
+        <div class="canvas-container">
+          <canvas id="doughnut"></canvas>
+        </div>
+        <p class="mid title">SENT ROUTES</p>
+        <table>
+          <tr v-for="route in routes">
+            <td>{{route.grade}}</td>
+            <td class="progress">{{route.routeName}}</td>
+          </tr>
+        </table>
       </div>
-      <p class="mid title">SENT ROUTES</p>
-      <table>
-        <tr v-for="route in routes">
-          <td>{{route.grade}}</td>
-          <td class="progress">{{route.routeName}}</td>
-        </tr>
-      </table>
     </div>
     <div v-if="mode === 'loading'" class="loading-container">
       <div class="sk-folding-cube">

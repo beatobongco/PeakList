@@ -89,6 +89,15 @@ var app = new Vue({
     this.grades = generateFrench()
   },
   methods: {
+    logout: function(e) {
+      e.preventDefault()
+      //empty state
+      this.userId = null
+      this.db = null
+      this.requirements = []
+      this.grades = []
+      firebase.auth().signOut()
+    },
     changeMode: function(mode, e) {
       if (e) {
         e.preventDefault()
@@ -96,6 +105,7 @@ var app = new Vue({
       this.mode = mode
     },
     doLogin: function(e) {
+      e.target.disabled = true
       e.preventDefault()
       firebase.auth().signInWithEmailAndPassword(e.target.form.username.value, e.target.form.password.value).catch(function(error) {
         console.log(error)
@@ -121,6 +131,7 @@ var app = new Vue({
       return requirements
     },
     doBackup: function() {
+      console.log(app.db().get())
       firebase.database().ref("users/" + app.userId).set({
         gradingSystem: app.gradingSystem,
         requirements: app.requirements,
@@ -143,7 +154,7 @@ var app = new Vue({
       })
     },
     doSetup: function(e) {
-      //todo: load stuff
+      e.target.disabled = true
       e.preventDefault()
       firebase.auth().createUserWithEmailAndPassword(e.target.form.username.value, e.target.form.password.value).catch(function(error) {
         alert(error.message)
@@ -168,32 +179,39 @@ var app = new Vue({
       return fulfilled
     },
     calculateStats: function() {
-      app.db().distinct()
       var labels = _(app.angles).map(a => a.statName).value()
       var ids = _(app.angles).map(a => a.id).value()
       var data = []
+      var shouldShow = false
       for (var i = 0; i < ids.length; i++) {
-        data.push(app.db({angle: ids[i]}).count())
+        var count = app.db({angle: ids[i]}).count()
+        data.push(count)
+        if (count > 0) {
+          shouldShow = true
+        }
       }
-      var myDoughnutChart = new Chart(document.getElementById("doughnut"), {
-        type: 'doughnut',
-        data: {
-          labels: labels,
-          datasets: [
-          {
-            data: data,
-            backgroundColor: [
-              "#0face1",
-              "#ef5728",
-              "#d2d1b3",
-              "#363731",
-              "#fcea24",
-              "#e2e2e2"
-            ]
-          }]
-        },
-        options: {},
-      })
+
+      if (shouldShow) {
+        var myDoughnutChart = new Chart(document.getElementById("doughnut"), {
+          type: 'doughnut',
+          data: {
+            labels: labels,
+            datasets: [
+            {
+              data: data,
+              backgroundColor: [
+                "#0face1",
+                "#ef5728",
+                "#d2d1b3",
+                "#363731",
+                "#fcea24",
+                "#e2e2e2"
+              ]
+            }]
+          },
+          options: {},
+        })
+      }
     },
     upgradePyramid: function() {
       //find highest grade in req
