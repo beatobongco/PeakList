@@ -59,6 +59,7 @@ var app = new Vue({
     pyramidSides: 38,
     mode: "loading",
     grades: [],
+    gradingSystem: null,
     requirements: [],
     db: null,
   },
@@ -85,7 +86,9 @@ var app = new Vue({
       }
     },
     isConnected: function(value) {
-      if (value === true) {
+      //only back up on reconnect and only if db is not empty
+      console.log(app.db().get().length)
+      if (value === true && app.db().get().length > 0) {
         app.doBackup()
       }
     }
@@ -137,37 +140,46 @@ var app = new Vue({
       }
       return requirements
     },
+    firebaseListen() {
+      console.log("LISTEN")
+      firebase.database().ref("users/" + app.userId).on('value', function(snapshot) {
+        //when new data from firebase server received
+        console.log("RECEIVED NEW DATA")
+        var v = snapshot.val()
+        console.log(v)
+        app.db = TAFFY(v.data)
+        app.requirements = v.requirements
+
+        // for first time
+        if (!app.gradingSystem) {
+          app.gradingSystem = v.gradingSystem
+          if (app.gradingSystem === "yds") {
+            app.grades = generateYds()
+          }
+          else {
+            app.grades = generateFrench()
+          }
+        }
+      })
+      firebase.database().ref(".info/connected").on("value", function(snap) {
+        if (snap.val() === true) {
+          app.isConnected = true
+        } else {
+          app.isConnected = false
+        }
+      })
+      app.mode = "record"
+    },
     doBackup: function() {
       if (app.isConnected) {
-        var timestamp = Math.round(new Date().getTime()/1000)
-        firebase.database().ref("users/" + app.userId).on('value', function(snapshot) {
-          var v = snapshot.val()
-          //write if its empty, but if it has stuff check if its fresh
-          if (!v || v.lastWrite < timestamp) {
-            firebase.database().ref("users/" + app.userId).set({
-              gradingSystem: app.gradingSystem,
-              requirements: app.requirements,
-              data: app.db().get(),
-              lastWrite: timestamp
-            })
-          }
+        console.log("BACKUP")
+        console.log(app.db().get())
+        firebase.database().ref("users/" + app.userId).set({
+          gradingSystem: app.gradingSystem,
+          requirements: app.requirements,
+          data: app.db().get()
         })
       }
-    },
-    doRestore: function() {
-      firebase.database().ref("users/" + app.userId).on('value', function(snapshot) {
-        var v = snapshot.val()
-        app.gradingSystem = v.gradingSystem
-        app.requirements = v.requirements
-        app.db = TAFFY(v.data)
-        if (app.gradingSystem === "yds") {
-          app.grades = generateYds()
-        }
-        else {
-          app.grades = generateFrench()
-        }
-        app.mode = "record"
-      })
     },
     doSetup: function(e) {
       e.target.disabled = true
@@ -248,6 +260,7 @@ var app = new Vue({
 
     },
     recordSend: function(e) {
+      console.log("RECORD")
       e.preventDefault()
       var data = $('#sendRecorder').serializeArray().reduce(
         function(obj, item) {
@@ -272,20 +285,9 @@ firebase.auth().onAuthStateChanged(function(user) {
     app.mode = "loading"
     app.userId = user.uid
     if (app.justRegistered) {
-      app.mode = "record"
       app.doBackup()
     }
-    else {
-      app.doRestore()
-    }
-    var connectedRef = firebase.database().ref(".info/connected");
-    connectedRef.on("value", function(snap) {
-      if (snap.val() === true) {
-        app.isConnected = true
-      } else {
-        app.isConnected = false
-      }
-    })
+    app.firebaseListen()
   }
   else {
     app.mode = "landing"
