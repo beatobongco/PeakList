@@ -83,6 +83,11 @@ var app = new Vue({
         app.checkPyramidComplete()
         app.calculateStats()
       }
+    },
+    isConnected: function(value) {
+      if (value === true) {
+        app.doBackup()
+      }
     }
   },
   ready: function() {
@@ -97,7 +102,7 @@ var app = new Vue({
       this.userId = null
       this.db = null
       this.requirements = []
-      this.grades = []
+      this.grades = generateFrench()
       firebase.auth().signOut()
     },
     changeMode: function(mode, e) {
@@ -133,19 +138,21 @@ var app = new Vue({
       return requirements
     },
     doBackup: function() {
-      //Only allow backup to be done if it is newest
-      var timestamp = Math.round(new Date().getTime()/1000)
-      firebase.database().ref("users/" + app.userId).on('value', function(snapshot) {
-        var v = snapshot.val()
-        if (!v.lastWrite || v.lastWrite < timestamp) {
-          firebase.database().ref("users/" + app.userId).set({
-            gradingSystem: app.gradingSystem,
-            requirements: app.requirements,
-            data: app.db().get(),
-            lastWrite: timestamp
-          })
-        }
-      })
+      if (app.isConnected) {
+        var timestamp = Math.round(new Date().getTime()/1000)
+        firebase.database().ref("users/" + app.userId).on('value', function(snapshot) {
+          var v = snapshot.val()
+          //write if its empty, but if it has stuff check if its fresh
+          if (!v || v.lastWrite < timestamp) {
+            firebase.database().ref("users/" + app.userId).set({
+              gradingSystem: app.gradingSystem,
+              requirements: app.requirements,
+              data: app.db().get(),
+              lastWrite: timestamp
+            })
+          }
+        })
+      }
     },
     doRestore: function() {
       firebase.database().ref("users/" + app.userId).on('value', function(snapshot) {
