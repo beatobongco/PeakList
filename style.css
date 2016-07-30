@@ -37,7 +37,7 @@ h3 {
   text-align: center;
 }
 .canvas-container {
-  width: 320px;
+  max-width: 500px;
   margin: auto;
 }
 #setupForm button {
