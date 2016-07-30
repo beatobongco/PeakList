@@ -53,6 +53,7 @@ var database = firebase.database()
 var app = new Vue({
   el: '#tickList',
   data: {
+    isConnected: true,
     justRegistered: false,
     userId: null,
     pyramidSides: 38,
@@ -90,6 +91,7 @@ var app = new Vue({
   },
   methods: {
     logout: function(e) {
+      e.target.disabled = true
       e.preventDefault()
       //empty state
       this.userId = null
@@ -131,11 +133,18 @@ var app = new Vue({
       return requirements
     },
     doBackup: function() {
-      console.log(app.db().get())
-      firebase.database().ref("users/" + app.userId).set({
-        gradingSystem: app.gradingSystem,
-        requirements: app.requirements,
-        data: app.db().get()
+      //Only allow backup to be done if it is newest
+      var timestamp = Math.round(new Date().getTime()/1000)
+      firebase.database().ref("users/" + app.userId).on('value', function(snapshot) {
+        var v = snapshot.val()
+        if (!v.lastWrite || v.lastWrite < timestamp) {
+          firebase.database().ref("users/" + app.userId).set({
+            gradingSystem: app.gradingSystem,
+            requirements: app.requirements,
+            data: app.db().get(),
+            lastWrite: timestamp
+          })
+        }
       })
     },
     doRestore: function() {
@@ -262,6 +271,14 @@ firebase.auth().onAuthStateChanged(function(user) {
     else {
       app.doRestore()
     }
+    var connectedRef = firebase.database().ref(".info/connected");
+    connectedRef.on("value", function(snap) {
+      if (snap.val() === true) {
+        app.isConnected = true
+      } else {
+        app.isConnected = false
+      }
+    })
   }
   else {
     app.mode = "landing"
