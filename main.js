@@ -71,12 +71,12 @@ var app = new Vue({
     },
     angles: function() {
       return [
-        {id: "slab", statName: "SLAB", displayName: "Slab"},
-        {id: "vertical", statName: "VERT", displayName: "Vertical"},
-        {id: "slight-overhang", statName: "SLGT", displayName: "Slight overhang (10-20&deg;)"},
-        {id: "moderate-overhang", statName: "MODR", displayName: "Moderate overhang (30-35&deg;)"},
-        {id: "steep-overhang", statName: "STEE", displayName: "Heavy overhang (~45&deg;)"},
-        {id: "roof", statName: "ROOF", displayName: "Roof"}
+        {id: "slab", statName: "SLAB", displayName: "Slab", color: "#0face1"},
+        {id: "vertical", statName: "VERT", displayName: "Vertical", color: "#ef5728"},
+        {id: "slight-overhang", statName: "SLGT", displayName: "Slight overhang (10-20&deg;)", color: "#d2d1b3"},
+        {id: "moderate-overhang", statName: "MODR", displayName: "Moderate overhang (30-35&deg;)", color: "#363731"},
+        {id: "steep-overhang", statName: "STEE", displayName: "Heavy overhang (~45&deg;)", color: "#fcea24"},
+        {id: "roof", statName: "ROOF", displayName: "Roof", color: "#e2e2e2"}
       ]
     },
   },
@@ -214,29 +214,29 @@ var app = new Vue({
     },
     calculateStats: function(grade) {
       console.log(grade)
-      var labels = _(app.angles).map(a => a.statName).value()
-      var ids = _(app.angles).map(a => a.id).value()
+      var labels = []
+      var colors = []
       var ctx = document.getElementById("doughnut")
       var data = []
       // var shouldShow = false
-      for (var i = 0; i < ids.length; i++) {
-        var filter = {angle: ids[i]}
-
+      for (var i = 0; i < app.angles.length; i++) {
+        var curr = app.angles[i]
+        var filter = {angle: curr.id}
         if (grade) {
           filter.grade = grade
         }
-
-        console.log(filter)
         var count = app.db(filter).count()
-        data.push(count)
-        // if (count > 0) {
-        //   shouldShow = true
-        // }
+        if (count > 0) {
+          data.push(count)
+          labels.push(curr.statName)
+          colors.push(curr.color)
+        }
       }
       if (ctx) {
         if (app.angleChart) {
           app.angleChart.data.labels = labels
           app.angleChart.data.datasets[0].data = data
+          app.angleChart.data.datasets[0].backgroundColor = colors
           app.angleChart.update()
         }
         else {
@@ -247,14 +247,7 @@ var app = new Vue({
               datasets: [
               {
                 data: data,
-                backgroundColor: [
-                  "#0face1",
-                  "#ef5728",
-                  "#d2d1b3",
-                  "#363731",
-                  "#fcea24",
-                  "#e2e2e2"
-                ]
+                backgroundColor: colors
               }]
             },
             options: {},
