@@ -80,6 +80,11 @@ var app = new Vue({
     },
   },
   watch: {
+    mode: function(value) {
+      if (value === "login" || value === "setup") {
+        console.log(document.querySelector("input[name='username']").focus())
+      }
+    },
     isConnected: function(value) {
       //only back up on reconnect and only if db is not empty
       if (value === true && app.db && app.db().get().length > 0) {
