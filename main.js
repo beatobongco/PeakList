@@ -63,6 +63,7 @@ var app = new Vue({
     gradingSystem: null,
     requirements: [],
     db: null,
+    angleChart: null,
   },
   computed: {
     routes: function () {
@@ -233,25 +234,32 @@ var app = new Vue({
         // }
       }
       if (ctx) {
-        var myDoughnutChart = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-            labels: labels,
-            datasets: [
-            {
-              data: data,
-              backgroundColor: [
-                "#0face1",
-                "#ef5728",
-                "#d2d1b3",
-                "#363731",
-                "#fcea24",
-                "#e2e2e2"
-              ]
-            }]
-          },
-          options: {},
-        })
+        if (app.angleChart) {
+          app.angleChart.data.labels = labels
+          app.angleChart.data.datasets[0].data = data
+          app.angleChart.update()
+        }
+        else {
+          app.angleChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: labels,
+              datasets: [
+              {
+                data: data,
+                backgroundColor: [
+                  "#0face1",
+                  "#ef5728",
+                  "#d2d1b3",
+                  "#363731",
+                  "#fcea24",
+                  "#e2e2e2"
+                ]
+              }]
+            },
+            options: {},
+          })
+        }
       }
     },
     upgradePyramid: function() {
