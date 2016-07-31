@@ -77,7 +77,7 @@ var app = new Vue({
         {id: "steep-overhang", statName: "STEE", displayName: "Heavy overhang (~45&deg;)"},
         {id: "roof", statName: "ROOF", displayName: "Roof"}
       ]
-    }
+    },
   },
   watch: {
     isConnected: function(value) {
@@ -143,7 +143,7 @@ var app = new Vue({
         console.log(v)
         app.db = TAFFY(v.data)
         app.requirements = v.requirements
-        app.calculateStats()
+        setTimeout(app.calculateStats, 200)
 
         // for first time
         if (!app.gradingSystem) {
@@ -203,6 +203,7 @@ var app = new Vue({
     calculateStats: function() {
       var labels = _(app.angles).map(a => a.statName).value()
       var ids = _(app.angles).map(a => a.id).value()
+      var ctx = document.getElementById("doughnut")
       var data = []
       var shouldShow = false
       for (var i = 0; i < ids.length; i++) {
@@ -212,8 +213,7 @@ var app = new Vue({
           shouldShow = true
         }
       }
-      var ctx = document.getElementById("doughnut")
-      if (shouldShow && ctx) {
+      if (ctx && shouldShow) {
         var myDoughnutChart = new Chart(ctx, {
           type: 'doughnut',
           data: {
@@ -267,7 +267,7 @@ var app = new Vue({
       if(app.checkPyramidComplete()) {
         app.upgradePyramid()
       }
-      app.calculateStats()
+
       app.doBackup()
       $('#sendRecorder')[0].reset()
     }
@@ -282,7 +282,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     if (app.justRegistered) {
       app.doBackup()
     }
-    app.mode = "record"
+    app.changeMode("record")
     app.firebaseListen()
   }
   else {
