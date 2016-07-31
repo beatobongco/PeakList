@@ -38,6 +38,22 @@ function generateFrench() {
   return g
 }
 
+function initialData() {
+  return {
+    email: null,
+    isConnected: true,
+    justRegistered: false,
+    userId: null,
+    pyramidSides: 38,
+    mode: "loading",
+    grades: generateFrench(),
+    gradingSystem: null,
+    requirements: [],
+    db: TAFFY(),
+    angleChart: null,
+  }
+}
+
 // Initialize Firebase
 var config = {
   apiKey: "AIzaSyCKV-7rSTj_oCjcmieX6QwYcUDo3J7eElA",
@@ -52,19 +68,7 @@ var database = firebase.database()
 
 var app = new Vue({
   el: '#tickList',
-  data: {
-    email: null,
-    isConnected: true,
-    justRegistered: false,
-    userId: null,
-    pyramidSides: 38,
-    mode: "loading",
-    grades: [],
-    gradingSystem: null,
-    requirements: [],
-    db: null,
-    angleChart: null,
-  },
+  data: initialData(),
   computed: {
     routes: function () {
       return _.sortBy(this.db().get(), function(o) { return o.grade })
@@ -96,20 +100,14 @@ var app = new Vue({
       }
     }
   },
-  ready: function() {
-    this.db = TAFFY()
-    this.grades = generateFrench()
-  },
   methods: {
     logout: function(e) {
       e.target.disabled = true
       e.preventDefault()
       //empty state
-      this.userId = null
-      this.db = null
-      this.requirements = []
-      this.grades = generateFrench()
-      firebase.auth().signOut()
+      firebase.auth().signOut().then(function() {
+        app.$data = initialData()
+      })
     },
     onGradeFilterChange(e) {
       app.calculateStats(e.target.value)
@@ -124,7 +122,7 @@ var app = new Vue({
       e.target.disabled = true
       e.preventDefault()
       firebase.auth().signInWithEmailAndPassword(e.target.form.username.value, e.target.form.password.value).catch(function(error) {
-        console.log(error)
+        alert(error.message)
       })
     },
     onGradeChange: function(e) {
@@ -300,6 +298,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     app.userId = user.uid
     app.email = user.email
     if (app.justRegistered) {
+      console.log("JUST REGISTERED")
       app.doBackup()
     }
     app.changeMode("record")
