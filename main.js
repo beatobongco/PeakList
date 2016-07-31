@@ -82,7 +82,10 @@ var app = new Vue({
   watch: {
     mode: function(value) {
       if (value === "login" || value === "setup") {
-        console.log(document.querySelector("input[name='username']").focus())
+        document.querySelector("input[name='username']").focus()
+      }
+      else if (value === "record") {
+        document.querySelector("input[name='routeName']").focus()
       }
     },
     isConnected: function(value) {
