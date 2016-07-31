@@ -110,6 +110,9 @@ var app = new Vue({
       this.grades = generateFrench()
       firebase.auth().signOut()
     },
+    onGradeFilterChange(e) {
+      app.calculateStats(e.target.value)
+    },
     changeMode: function(mode, e) {
       if (e) {
         e.preventDefault()
@@ -208,20 +211,28 @@ var app = new Vue({
       }
       return fulfilled
     },
-    calculateStats: function() {
+    calculateStats: function(grade) {
+      console.log(grade)
       var labels = _(app.angles).map(a => a.statName).value()
       var ids = _(app.angles).map(a => a.id).value()
       var ctx = document.getElementById("doughnut")
       var data = []
-      var shouldShow = false
+      // var shouldShow = false
       for (var i = 0; i < ids.length; i++) {
-        var count = app.db({angle: ids[i]}).count()
-        data.push(count)
-        if (count > 0) {
-          shouldShow = true
+        var filter = {angle: ids[i]}
+
+        if (grade) {
+          filter.grade = grade
         }
+
+        console.log(filter)
+        var count = app.db(filter).count()
+        data.push(count)
+        // if (count > 0) {
+        //   shouldShow = true
+        // }
       }
-      if (ctx && shouldShow) {
+      if (ctx) {
         var myDoughnutChart = new Chart(ctx, {
           type: 'doughnut',
           data: {

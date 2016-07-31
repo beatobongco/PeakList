@@ -265,7 +265,20 @@
         </tr>
       </table>
       <div v-if="routes.length > 0">
-        <p class="mid title">STATS (STRIVE FOR BALANCE)</p>
+        <div class="grid-form">
+          <fieldset>
+            <legend>Stats (strive for balance)</legend>
+            <div data-row-span="1">
+              <div data-field-span="1">
+                <label>Select a grade</label>
+                <select id="gradeStatSelector" v-on:change="onGradeFilterChange($event)">
+                  <option value="">All grades</option>
+                  <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+        </form>
         <p class="mid">ANGLE</p>
         <div class="canvas-container">
           <canvas id="doughnut"></canvas>
