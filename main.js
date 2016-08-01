@@ -101,7 +101,7 @@ var app = new Vue({
         {id: "jib", statName: "JIB", displayName: "Jib", color: "#ef5728"},
         {id: "jug", statName: "JUG", displayName: "Jug", color: "#d2d1b3"},
         {id: "mono", statName: "MONO", displayName: "Mono", color: "#363731"},
-        {id: "pinch", statName: "PINC", displayName: "Pinch", color: "#fcea24"},
+        {id: "pinch", statName: "PNCH", displayName: "Pinch", color: "#fcea24"},
         {id: "pocket", statName: "POCK", displayName: "Pocket", color: "#e2e2e2"},
         {id: "sidepull", statName: "SIDE", displayName: "Sidepull", color: "#e3cb29"},
         {id: "sloper", statName: "SLOP", displayName: "Sloper", color: "#aa231f"},
