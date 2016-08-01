@@ -9,6 +9,18 @@ function debug__logout() {
   firebase.auth().signOut()
 }
 
+function debug__anim(anim, anim2) {
+  var pc = $('.pyramid-container')
+  var animation = "animated " + anim
+  pc.addClass(animation)
+  pc.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+    if (anim2) {
+      pc.removeClass(animation)
+      pc.addClass("animated " + anim2)
+    }
+  })
+}
+
 function generateYds() {
   var g = ["5.8", "5.9"]
   var limit = 14
@@ -227,7 +239,24 @@ var app = new Vue({
           fulfilled = false
         }
       }
-      return fulfilled
+
+      if (fulfilled) {
+        var pc = $('.pyramid-container')
+        var animationOut = "animated bounceOut"
+        var animationIn = "animated bounceIn"
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend'
+        pc.addClass(animationOut)
+
+        pc.one(animationEnd, function() {
+          pc.removeClass(animationOut)
+          app.upgradePyramid()
+          pc.addClass(animationIn)
+          pc.one(animationEnd, function() {
+            pc.removeClass(animationOut)
+            app.checkPyramidComplete()
+          })
+        })
+      }
     },
     calculateStat(stat, chartType, grade, showZeroes) {
       /**
@@ -319,6 +348,7 @@ var app = new Vue({
         this.requirements[i].required = this.requirements[i].required + increment
       }
 
+      app.doBackup()
     },
     recordSend: function(e) {
       console.log("RECORD")
@@ -330,13 +360,10 @@ var app = new Vue({
         }, {})
 
       this.db.insert(data)
-
-      if(app.checkPyramidComplete()) {
-        app.upgradePyramid()
-      }
-
       app.doBackup()
       $('#sendRecorder')[0].reset()
+
+      app.checkPyramidComplete()
     }
   }
 })
