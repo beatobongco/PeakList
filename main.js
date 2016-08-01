@@ -168,8 +168,11 @@ var app = new Vue({
         app.requirements = v.requirements
 
         setTimeout(function() {
-          app.calculateStats(document.getElementById("gradeStatSelector").value)
-        }, 100)
+          var gss = document.getElementById("gradeStatSelector")
+          if (gss) {
+            app.calculateStats(gss.value)
+          }
+        })
 
         // for first time
         if (!app.gradingSystem) {
