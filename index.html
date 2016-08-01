@@ -119,9 +119,7 @@
             <div data-field-span="1">
               <label for="routeWork">Route work</label>
               <select name="routeWork" id="routeWork">
-                <option value="redpoint">Redpoint</option>
-                <option value="flash">Flash</option>
-                <option value="onsight">On-sight</option>
+                <option v-for="work in routeWorks" value="{{work.id}}">{{work.displayName}}</option>
               </select>
             </div>
             <div data-field-span="1">
@@ -279,6 +277,10 @@
         <p class="mid">HOLD TYPE</p>
         <div class="canvas-container">
           <canvas id="holdTypeChart"></canvas>
+        </div>
+        <p class="mid">WORK</p>
+        <div class="canvas-container">
+          <canvas id="routeWorkChart"></canvas>
         </div>
         <p class="mid title">{{routes.length}} ROUTES SENT</p>
         <table>

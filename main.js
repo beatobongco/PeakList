@@ -64,6 +64,7 @@ function initialData() {
     db: TAFFY(),
     angleChart: null,
     holdTypeChart: null,
+    routeWorkChart: null,
   }
 }
 
@@ -107,6 +108,13 @@ var app = new Vue({
         {id: "sidepull", statName: "SIDE", displayName: "Sidepull", color: "#e3cb29"},
         {id: "sloper", statName: "SLOP", displayName: "Sloper", color: "#aa231f"},
         {id: "undercling", statName: "UNDR", displayName: "Undercling", color: "#000"}
+      ]
+    },
+    routeWorks: function() {
+      return [
+        {id: "redpoint", statName: "REDP", displayName: "Redpoint", color: "#aa231f"},
+        {id: "flash", statName: "FLSH", displayName: "Flash", color: "#e3cb29"},
+        {id: "onsight", statName: "ONST", displayName: "On-sight", color: "#0face1"}
       ]
     },
     filterableGrades: function() {
@@ -334,8 +342,9 @@ var app = new Vue({
       }
     },
     calculateStats: function(grade) {
-      app.calculateStat("angle", "doughnut", grade)
+      app.calculateStat("angle", "bar", grade, true)
       app.calculateStat("holdType", "bar", grade, true)
+      app.calculateStat("routeWork", "doughnut", grade)
     },
     upgradePyramid: function() {
       //find highest grade in req
