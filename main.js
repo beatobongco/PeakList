@@ -169,7 +169,7 @@ var app = new Vue({
 
         setTimeout(function() {
           app.calculateStats(document.getElementById("gradeStatSelector").value)
-        })
+        }, 100)
 
         // for first time
         if (!app.gradingSystem) {
