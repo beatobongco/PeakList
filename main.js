@@ -79,8 +79,21 @@ var app = new Vue({
         {id: "vertical", statName: "VERT", displayName: "Vertical", color: "#ef5728"},
         {id: "slight-overhang", statName: "SLGT", displayName: "Slight overhang (10-20&deg;)", color: "#d2d1b3"},
         {id: "moderate-overhang", statName: "MODR", displayName: "Moderate overhang (30-35&deg;)", color: "#363731"},
-        {id: "steep-overhang", statName: "STEE", displayName: "Heavy overhang (~45&deg;)", color: "#fcea24"},
+        {id: "steep-overhang", statName: "HEVY", displayName: "Heavy overhang (~45&deg;)", color: "#fcea24"},
         {id: "roof", statName: "ROOF", displayName: "Roof", color: "#e2e2e2"}
+      ]
+    },
+    holdTypes: function() {
+      return [
+        {id: "crimp", statName: "CRIM", displayName: "Crimp", color: "#0face1"},
+        {id: "jib", statName: "JIB", displayName: "Jib", color: "#ef5728"},
+        {id: "jug", statName: "JUG", displayName: "Jug", color: "#d2d1b3"},
+        {id: "mono", statName: "MONO", displayName: "Mono", color: "#363731"},
+        {id: "pinch", statName: "PINC", displayName: "Pinch", color: "#fcea24"},
+        {id: "pocket", statName: "POCK", displayName: "Pocket", color: "#e2e2e2"},
+        {id: "sidepull", statName: "SIDE", displayName: "Sidepull", color: "#e3cb29"},
+        {id: "sloper", statName: "SLOP", displayName: "Sloper", color: "#aa231f"},
+        {id: "undercling", statName: "UNDR", displayName: "Undercling", color: "#000"}
       ]
     },
   },
@@ -156,7 +169,7 @@ var app = new Vue({
 
         setTimeout(function() {
           app.calculateStats(document.getElementById("gradeStatSelector").value)
-        }, 200)
+        })
 
         // for first time
         if (!app.gradingSystem) {
@@ -213,48 +226,80 @@ var app = new Vue({
       }
       return fulfilled
     },
-    calculateStats: function(grade) {
-      console.log(grade)
+    calculateStat(stat, chartType, grade, showZeroes) {
+      /**
+        Stats follow these basic rules
+        Define a stat (e.g. angle)
+        Canvas element: id must be stat + Chart (angleChart)
+        Computed vue value must be stat + 's' (angles)
+      **/
       var labels = []
       var colors = []
-      var ctx = document.getElementById("doughnut")
+      var ctx = document.getElementById(stat + "Chart")
       var data = []
-      // var shouldShow = false
-      for (var i = 0; i < app.angles.length; i++) {
-        var curr = app.angles[i]
-        var filter = {angle: curr.id}
+      var options = {}
+
+      for (var i = 0; i < app[stat + "s"].length; i++) {
+        var curr = app[stat + "s"][i]
+        var filter = {}
+        filter[stat] = curr.id
+
         if (grade) {
           filter.grade = grade
         }
+
         var count = app.db(filter).count()
-        if (count > 0) {
+        if (count > 0 || showZeroes) {
           data.push(count)
           labels.push(curr.statName)
           colors.push(curr.color)
         }
       }
       if (ctx) {
-        if (app.angleChart) {
-          app.angleChart.data.labels = labels
-          app.angleChart.data.datasets[0].data = data
-          app.angleChart.data.datasets[0].backgroundColor = colors
-          app.angleChart.update()
+        var c = app[stat + "Chart"]
+        if (c) {
+          c.data.labels = labels
+          c.data.datasets[0].data = data
+          c.data.datasets[0].backgroundColor = colors
+          c.update()
         }
         else {
-          app.angleChart = new Chart(ctx, {
-            type: 'doughnut',
+          if (chartType === "bar") {
+            options = {
+              legend: {
+                display: false,
+              },
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    stepSize: 1
+                  }
+                }]
+              }
+            }
+          }
+
+          app[stat + "Chart"] = new Chart(ctx, {
+            type: chartType,
             data: {
               labels: labels,
               datasets: [
-              {
-                data: data,
-                backgroundColor: colors
-              }]
+                {
+                  data: data,
+                  backgroundColor: colors
+                }]
             },
-            options: {},
+            options: options,
           })
         }
       }
+      console.log(labels)
+      console.log(data)
+      console.log(colors)
+    },
+    calculateStats: function(grade) {
+      app.calculateStat("angle", "doughnut", grade)
+      app.calculateStat("holdType", "bar", grade, true)
     },
     upgradePyramid: function() {
       //find highest grade in req

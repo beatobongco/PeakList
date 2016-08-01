@@ -146,15 +146,7 @@
               <label for="holdType">Prominent hold type</label>
               <select name="holdType" id="holdType">
                 <option value="">Select type</option>
-                <option value="crimp">Crimp</option>
-                <option value="jib">Jib</option>
-                <option value="jug">Jug</option>
-                <option value="mono">Mono</option>
-                <option value="pinch">Pinch</option>
-                <option value="pocket">Pocket</option>
-                <option value="sidepull">Sidepull</option>
-                <option value="sloper">Sloper</option>
-                <option value="undercling">Undercling</option>
+                <option v-for="hold in holdTypes" value="{{ hold.id}}">{{{hold.displayName}}}</option>
               </select>
             </div>
             <div data-field-span="1">
@@ -281,7 +273,11 @@
         </div>
         <p class="mid">ANGLE</p>
         <div class="canvas-container">
-          <canvas id="doughnut"></canvas>
+          <canvas id="angleChart"></canvas>
+        </div>
+        <p class="mid">HOLD TYPE</p>
+        <div class="canvas-container">
+          <canvas id="holdTypeChart"></canvas>
         </div>
         <p class="mid title">SENT ROUTES</p>
         <table>
