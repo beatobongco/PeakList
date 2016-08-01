@@ -42,12 +42,12 @@
           <legend></legend>
           <div data-row-span="2">
             <div data-field-span="1">
-              <label>Email</label>
-              <input type="text" name="username">
+              <label for="username">Email</label>
+              <input type="text" name="username" id="username">
             </div>
             <div data-field-span="1">
-              <label>Password</label>
-              <input type="password" name="password">
+              <label for="password">Password</label>
+              <input type="password" name="password" id="password">
             </div>
           </div>
         </fieldset>
@@ -64,16 +64,16 @@
         <legend>PeakList Setup</legend>
         <div data-row-span="3">
           <div data-field-span="1">
-            <label>Email</label>
-            <input type="text" name="username">
+            <label for="username">Email</label>
+            <input type="text" name="username" id="username">
           </div>
           <div data-field-span="1">
-            <label>Choose a password</label>
-            <input type="text" name="password">
+            <label for="password">Choose a password</label>
+            <input type="text" name="password" id="password">
           </div>
           <div data-field-span="1">
-            <label>Choose grading system</label>
-            <select v-on:change="onGradeChange" name="gradingSystem">
+            <label for="gradingSystem">Choose grading system</label>
+            <select v-on:change="onGradeChange" name="gradingSystem" id="gradingSystem">
               <option value="french">French</option>
               <option value="yds">Yosemite Decimal System</option>
             </select>
@@ -81,8 +81,8 @@
         </div>
         <div data-row-span="1">
           <div data-field-span="1">
-            <label>What is your current onsight level?</label>
-            <select name="onsightLevel">
+            <label for="onsightLevel">What is your current onsight level?</label>
+            <select name="onsightLevel" id="onsightLevel">
               <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
             </select>
           </div>
@@ -104,35 +104,35 @@
           <legend>Send a route</legend>
           <div data-row-span="1">
             <div data-field-span="1">
-              <label>Route name</label>
-              <input name="routeName" type="text">
+              <label for="routeName">Route name</label>
+              <input name="routeName" id="routeName" type="text">
             </div>
           </div>
           <div data-row-span="4">
             <div data-field-span="1">
-              <label>Grade</label>
-              <select name="grade">
+              <label for="grade">Grade</label>
+              <select name="grade" id="grade">
                 <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
               </select>
             </div>
             <div data-field-span="1">
-              <label>Route work</label>
-              <select name="routeWork">
+              <label for="routeWork">Route work</label>
+              <select name="routeWork" id="routeWork">
                 <option value="redpoint">Redpoint</option>
                 <option value="flash">Flash</option>
                 <option value="onsight">On-sight</option>
               </select>
             </div>
             <div data-field-span="1">
-              <label>Indoor or outdoor</label>
-              <select name="indoorOrOutdoor">
+              <label for="indoorOrOutdoor">Indoor or outdoor</label>
+              <select name="indoorOrOutdoor" id="indoorOrOutdoor">
                 <option value="indoor">Indoor</option>
                 <option value="outdoor">Outdoor</option>
               </select>
             </div>
             <div data-field-span="1">
-              <label>Top rope or lead</label>
-              <select name="topRopeOrLead">
+              <label for="topRopeOrLead">Top rope or lead</label>
+              <select name="topRopeOrLead" id="topRopeOrLead">
                 <option value="toprope">Top rope</option>
                 <option value="lead">Lead</option>
               </select>
@@ -143,8 +143,8 @@
           <legend>Optional route data</legend>
           <div data-row-span="4">
             <div data-field-span="1">
-              <label>Prominent hold type</label>
-              <select name="holdType">
+              <label for="holdType">Prominent hold type</label>
+              <select name="holdType" id="holdType">
                 <option value="">Select type</option>
                 <option value="crimp">Crimp</option>
                 <option value="jib">Jib</option>
@@ -158,8 +158,8 @@
               </select>
             </div>
             <div data-field-span="1">
-              <label>Route length</label>
-              <select name="routeLength">
+              <label for="routeLength">Route length</label>
+              <select name="routeLength" id="routeLength">
                 <option value="">Select length</option>
                 <option value="short">Short</option>
                 <option value="medium">Medium</option>
@@ -167,8 +167,8 @@
               </select>
             </div>
             <div data-field-span="1">
-              <label>Crux location</label>
-              <select name="cruxLocation">
+              <label for="cruxLocation">Crux location</label>
+              <select name="cruxLocation" id="cruxLocation">
                 <option value="">Select location</option>
                 <option value="beginning">Beginning</option>
                 <option value="middle">Middle</option>
@@ -176,8 +176,8 @@
               </select>
             </div>
             <div data-field-span="1">
-              <label>Prominent angle</label>
-              <select name="angle">
+              <label for="angle">Prominent angle</label>
+              <select name="angle" id="angle">
                 <option value="">Select angle</option>
                 <option v-for="angle in angles" value="{{ angle.id}}">{{{angle.displayName}}}</option>
               </select>
@@ -185,8 +185,8 @@
           </div>
           <div data-row-span="1">
             <div data-field-span="1">
-              <label>Prominent technique</label>
-              <select name="technique">
+              <label for="technique">Prominent technique</label>
+              <select name="technique" id="technique">
                 <option value="">Select technique</option>
                 <option value="armbar">Arm bar</option>
                 <option value="balance">Balance</option>
@@ -221,8 +221,8 @@
           </div>
           <div data-row-span="1">
             <div data-field-span="1">
-              <label>Comments</label>
-              <textarea name="comments"></textarea>
+              <label for="comments">Comments</label>
+              <textarea name="comments" id="comments"></textarea>
             </div>
           </div>
         </fieldset>
@@ -270,7 +270,7 @@
             <legend>Stats (strive for balance)</legend>
             <div data-row-span="1">
               <div data-field-span="1">
-                <label>Select a grade</label>
+                <label for="gradeStatSelector">Select a grade</label>
                 <select id="gradeStatSelector" v-on:change="onGradeFilterChange($event)">
                   <option value="">All grades</option>
                   <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>

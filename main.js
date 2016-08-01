@@ -153,7 +153,10 @@ var app = new Vue({
         console.log(v)
         app.db = TAFFY(v.data)
         app.requirements = v.requirements
-        setTimeout(app.calculateStats, 200)
+
+        setTimeout(function() {
+          app.calculateStats(document.getElementById("gradeStatSelector").value)
+        }, 200)
 
         // for first time
         if (!app.gradingSystem) {
