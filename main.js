@@ -297,9 +297,6 @@ var app = new Vue({
           })
         }
       }
-      console.log(labels)
-      console.log(data)
-      console.log(colors)
     },
     calculateStats: function(grade) {
       app.calculateStat("angle", "doughnut", grade)
