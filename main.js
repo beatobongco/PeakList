@@ -109,11 +109,7 @@ var app = new Vue({
       ]
     },
     filterableGrades: function() {
-      var max = _.maxBy(this.routes, function(o) { return o.grade }).grade
-      var min = _.minBy(this.routes, function(o) { return o.grade }).grade
-      var g = this.grades
-
-      return g.slice(g.indexOf(min), g.indexOf(max) + 1)
+      return this.db().distinct("grade").sort()
     }
   },
   watch: {
