@@ -97,7 +97,7 @@ var app = new Vue({
     },
     holdTypes: function() {
       return [
-        {id: "crimp", statName: "CRIM", displayName: "Crimp", color: "#0face1"},
+        {id: "crimp", statName: "CRMP", displayName: "Crimp", color: "#0face1"},
         {id: "jib", statName: "JIB", displayName: "Jib", color: "#ef5728"},
         {id: "jug", statName: "JUG", displayName: "Jug", color: "#d2d1b3"},
         {id: "mono", statName: "MONO", displayName: "Mono", color: "#363731"},
