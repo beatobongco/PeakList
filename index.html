@@ -266,7 +266,7 @@
                 <label for="gradeStatSelector">Select a grade</label>
                 <select id="gradeStatSelector" v-on:change="onGradeFilterChange($event)">
                   <option value="">All grades</option>
-                  <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
+                  <option v-for="grade in filterableGrades" value="{{grade}}">{{grade}}</option>
                 </select>
               </div>
             </div>

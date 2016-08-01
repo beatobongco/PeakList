@@ -108,6 +108,13 @@ var app = new Vue({
         {id: "undercling", statName: "UNDR", displayName: "Undercling", color: "#000"}
       ]
     },
+    filterableGrades: function() {
+      var max = _.maxBy(this.routes, function(o) { return o.grade }).grade
+      var min = _.minBy(this.routes, function(o) { return o.grade }).grade
+      var g = this.grades
+
+      return g.slice(g.indexOf(min), g.indexOf(max) + 1)
+    }
   },
   watch: {
     mode: function(value) {
