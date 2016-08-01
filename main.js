@@ -63,6 +63,7 @@ function initialData() {
     requirements: [],
     db: TAFFY(),
     angleChart: null,
+    holdTypeChart: null,
   }
 }
 
@@ -265,6 +266,7 @@ var app = new Vue({
       /**
         Stats follow these basic rules
         Define a stat (e.g. angle)
+        Put that stat in app.data
         Canvas element: id must be stat + Chart (angleChart)
         Computed vue value must be stat + 's' (angles)
       **/
@@ -290,6 +292,7 @@ var app = new Vue({
           colors.push(curr.color)
         }
       }
+
       if (ctx) {
         var c = app[stat + "Chart"]
         if (c) {
