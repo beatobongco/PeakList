@@ -166,8 +166,6 @@ var app = new Vue({
         app.gradingSystem = v.gradingSystem
         app.requirements = v.requirements
         app.db = TAFFY(v.data)
-        app.checkPyramidComplete()
-        app.calculateStats()
 
         if (v.gradingSystem === "hueco") {
           app.grades = generateHueco()
@@ -178,6 +176,9 @@ var app = new Vue({
         else if (v.gradingSystem === "yds") {
           app.grades = generateYds()
         }
+
+        app.checkPyramidComplete()
+        app.calculateStats()
 
       })
     },
@@ -270,7 +271,6 @@ var app = new Vue({
     doBackup: function() {
       if (app.isConnected) {
         firebase.database().ref("users/" + app.userId + "/" + app.climbType).update({
-          gradingSystem: app.gradingSystem,
           requirements: app.requirements,
           data: app.db().get(),
         })
@@ -301,6 +301,7 @@ var app = new Vue({
       })
     },
     checkPyramidComplete: function() {
+      console.log("CHECK PYRAMID")
       var fulfilled = true
       for (var i = 0; i < this.requirements.length; i++) {
         var r = this.requirements[i]
@@ -318,6 +319,14 @@ var app = new Vue({
         var animationOut = "animated bounceOut"
         var animationIn = "animated bounceIn"
         var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend'
+        var g = this.grades
+        var index = g.indexOf(app.requirements[0].grade)
+        console.log(app.requirements[0].grade, index, g.length)
+        if (index + 1 >= g.length) {
+          console.log("Congratulations, you're a real Sharma!")
+          return
+        }
+
         pc.addClass(animationOut)
 
         pc.one(animationEnd, function() {
@@ -325,7 +334,7 @@ var app = new Vue({
           app.upgradePyramid()
           pc.addClass(animationIn)
           pc.one(animationEnd, function() {
-            pc.removeClass(animationOut)
+            pc.removeClass(animationIn)
             app.checkPyramidComplete()
           })
         })
@@ -413,10 +422,11 @@ var app = new Vue({
       //find highest grade in req
       var r = this.requirements
       var g = this.grades
+      var index = g.indexOf(r[0].grade)
 
       //New tip
       this.requirements.unshift({
-        grade: g[g.indexOf(r[0].grade) + 1],
+        grade: g[index + 1],
         required: 1
       })
       this.requirements.pop()
@@ -438,9 +448,7 @@ var app = new Vue({
 
       this.db.insert(data)
       app.doBackup()
-      $('#sendRecorder')[0].reset()
-
-      app.checkPyramidComplete()
+      //$('#sendRecorder')[0].reset()
     }
   }
 })
@@ -453,6 +461,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     if (app.justRegistered) {
       console.log("JUST REGISTERED")
       app.doInitialBackup()
+      app.justRegistered = false
     }
     app.changeMode("record")
     app.firebaseListen()
