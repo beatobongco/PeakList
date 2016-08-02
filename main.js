@@ -448,7 +448,7 @@ var app = new Vue({
 
       this.db.insert(data)
       app.doBackup()
-      //$('#sendRecorder')[0].reset()
+      $('#sendRecorder')[0].reset()
     }
   }
 })
