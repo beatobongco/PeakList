@@ -1,8 +1,12 @@
 [v-cloak] {
   display: none;
 }
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
 #tickList {
-  max-width: 1024px;
+  max-width: 100%;
   margin: 0 auto;
   position: relative;
 }
@@ -113,9 +117,6 @@ h3 {
 }
 .mid.title {
   font-weight: 600;
-}
-.record-container {
-  max-width: 100%;
 }
 .pyramid-container {
   position: relative;
