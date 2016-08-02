@@ -98,7 +98,7 @@
       <button type="submit" v-on:click="doSetup($event)">Signup</button>
       <button v-on:click="changeMode('landing', $event)">Back</button>
     </form>
-    <div v-if="mode === 'record'">
+    <div v-if="mode === 'record'" class="record-container">
       <p class="conn-stat">
         <span>{{ email }} | </span>
         <span>Status:</span>

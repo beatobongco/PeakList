@@ -114,6 +114,9 @@ h3 {
 .mid.title {
   font-weight: 600;
 }
+.record-container {
+  max-width: 100%;
+}
 .pyramid-container {
   position: relative;
 }
