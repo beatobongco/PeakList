@@ -5,6 +5,7 @@ body {
   max-width: 1024px;
   margin: 0 auto;
   overflow-x: hidden;
+  padding: 10px;
 }
 #tickList {
   max-width: 100%;
