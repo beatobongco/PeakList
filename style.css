@@ -128,6 +128,7 @@ h3 {
   border-right: 38px solid transparent;
   border-bottom: 48px solid;
   z-index: 100;
+  max-width: 228px;
 }
 .pyramid.main .shape:hover {
   opacity: .8;
