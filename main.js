@@ -50,13 +50,23 @@ function generateFrench() {
   return g
 }
 
+function generateHueco() {
+  var g = ["VB"]
+  var limit = 15
+  var current = 0
+  while (current !== limit + 1) {
+    g.push("V" + current)
+    current++
+  }
+  return g
+}
+
 function initialData() {
   return {
     email: null,
     isConnected: true,
     justRegistered: false,
     userId: null,
-    pyramidSides: 38,
     mode: "loading",
     grades: generateFrench(),
     gradingSystem: null,
@@ -65,6 +75,9 @@ function initialData() {
     angleChart: null,
     holdTypeChart: null,
     routeWorkChart: null,
+    climbType: "route",
+    routeOnsight: null,
+    boulderOnsight: null,
   }
 }
 
@@ -119,7 +132,13 @@ var app = new Vue({
     },
     filterableGrades: function() {
       return this.db().distinct("grade").sort()
-    }
+    },
+    boulderGrades: function() {
+      return generateHueco()
+    },
+    pyramidSides: function() {
+      return 38
+    },
   },
   watch: {
     mode: function(value) {
@@ -138,6 +157,30 @@ var app = new Vue({
     }
   },
   methods: {
+    changeClimbType(e, type) {
+      e.preventDefault()
+      app.climbType = type
+
+      firebase.database().ref("users/" + app.userId + "/" + type).once('value', function(snapshot) {
+        var v = snapshot.val()
+        app.gradingSystem = v.gradingSystem
+        app.requirements = v.requirements
+        app.db = TAFFY(v.data)
+        app.checkPyramidComplete()
+        app.calculateStats()
+
+        if (v.gradingSystem === "hueco") {
+          app.grades = generateHueco()
+        }
+        else if (v.gradingSystem === "french") {
+          app.grades = generateFrench()
+        }
+        else if (v.gradingSystem === "yds") {
+          app.grades = generateYds()
+        }
+
+      })
+    },
     logout: function(e) {
       e.target.disabled = true
       e.preventDefault()
@@ -170,12 +213,18 @@ var app = new Vue({
         this.grades = generateFrench()
       }
     },
-    calculatePyramid: function(onSightLevel) {
+    calculatePyramid: function(onSightLevel, climbType) {
       var requirements = []
       var reps = 1
+      var grades = this.grades
+
+      if (climbType === "boulder") {
+        grades = generateHueco()
+      }
+
       for (var i = 4; i > 0; i--) {
         //start at top of pyramid
-        var base = this.grades[this.grades.indexOf(onSightLevel) + i]
+        var base = grades[grades.indexOf(onSightLevel) + i]
         requirements.push({grade: base, required: reps})
         reps = reps * 2
       }
@@ -185,28 +234,29 @@ var app = new Vue({
       console.log("LISTEN")
       firebase.database().ref("users/" + app.userId).on('value', function(snapshot) {
         //when new data from firebase server received
-        console.log("RECEIVED NEW DATA")
+        console.log("RECEIVED NEW DATA --- MODE: ", app.climbType)
         var v = snapshot.val()
         console.log(v)
-        app.db = TAFFY(v.data)
-        app.requirements = v.requirements
 
-        setTimeout(function() {
-          var gss = document.getElementById("gradeStatSelector")
-          if (gss) {
-            app.calculateStats(gss.value)
-          }
-        })
+        if (app.climbType === "route") {
+          console.log("SET ROUTE DATA")
+          app.db = TAFFY(v.route.data)
+          app.requirements = v.route.requirements
+        }
+        else if (app.climbType === "boulder") {
+          console.log("SET BOULDER DATA")
+          app.db = TAFFY(v.boulder.data)
+          app.requirements = v.boulder.requirements
+        }
 
-        // for first time
-        if (!app.gradingSystem) {
-          app.gradingSystem = v.gradingSystem
-          if (app.gradingSystem === "yds") {
-            app.grades = generateYds()
-          }
-          else {
-            app.grades = generateFrench()
-          }
+        app.checkPyramidComplete()
+
+        var gss = document.getElementById("gradeStatSelector")
+        if (gss) {
+          app.calculateStats(gss.value)
+        }
+        else {
+          app.calculateStats()
         }
       })
       firebase.database().ref(".info/connected").on("value", function(snap) {
@@ -219,12 +269,10 @@ var app = new Vue({
     },
     doBackup: function() {
       if (app.isConnected) {
-        console.log("BACKUP")
-        console.log(app.db().get())
-        firebase.database().ref("users/" + app.userId).set({
+        firebase.database().ref("users/" + app.userId + "/" + app.climbType).update({
           gradingSystem: app.gradingSystem,
           requirements: app.requirements,
-          data: app.db().get()
+          data: app.db().get(),
         })
       }
     },
@@ -235,9 +283,22 @@ var app = new Vue({
         alert(error.message)
         e.target.disabled = false
       })
+
+      app.routeOnsight = e.target.form.onsightLevel.value
+      app.boulderOnsight = e.target.form.boulderOnsight.value
       app.gradingSystem = e.target.form.gradingSystem.value
-      app.requirements = app.calculatePyramid(e.target.form.onsightLevel.value)
       app.justRegistered = true
+    },
+    doInitialBackup() {
+      firebase.database().ref("users/" + app.userId + "/route").set({
+        gradingSystem: app.gradingSystem,
+        requirements: app.calculatePyramid(app.routeOnsight),
+      })
+
+      firebase.database().ref("users/" + app.userId + "/boulder").set({
+        gradingSystem: "hueco",
+        requirements: app.calculatePyramid(app.boulderOnsight, "boulder"),
+      })
     },
     checkPyramidComplete: function() {
       var fulfilled = true
@@ -342,9 +403,11 @@ var app = new Vue({
       }
     },
     calculateStats: function(grade) {
-      app.calculateStat("angle", "bar", grade, true)
-      app.calculateStat("holdType", "bar", grade, true)
-      app.calculateStat("routeWork", "doughnut", grade)
+      setTimeout(function(grade) {
+        app.calculateStat("angle", "bar", grade, true)
+        app.calculateStat("holdType", "bar", grade, true)
+        app.calculateStat("routeWork", "doughnut", grade)
+      }.bind(this, grade), 100)
     },
     upgradePyramid: function() {
       //find highest grade in req
@@ -366,7 +429,6 @@ var app = new Vue({
       app.doBackup()
     },
     recordSend: function(e) {
-      console.log("RECORD")
       e.preventDefault()
       var data = $('#sendRecorder').serializeArray().reduce(
         function(obj, item) {
@@ -390,7 +452,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     app.email = user.email
     if (app.justRegistered) {
       console.log("JUST REGISTERED")
-      app.doBackup()
+      app.doInitialBackup()
     }
     app.changeMode("record")
     app.firebaseListen()

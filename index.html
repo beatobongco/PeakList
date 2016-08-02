@@ -80,11 +80,17 @@
             </select>
           </div>
         </div>
-        <div data-row-span="1">
+        <div data-row-span="2">
           <div data-field-span="1">
             <label for="onsightLevel">What is your current onsight level?</label>
             <select name="onsightLevel" id="onsightLevel">
               <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
+            </select>
+          </div>
+          <div data-field-span="1">
+            <label for="boulderOnsight">How about for bouldering?</label>
+            <select name="boulderOnsight" id="boulderOnsight">
+              <option v-for="grade in boulderGrades" value="{{grade}}">{{grade}}</option>
             </select>
           </div>
         </div>
@@ -99,7 +105,12 @@
         <span v-if="isConnected" class="online">online</span>
         <span v-if="!isConnected" class="offline">offline</span>
       </p>
-      <a v-on:click="logout($event)" class="logout" href="#">Logout</a>
+      <div class="nav-bar">
+        <a v-on:click="changeClimbType($event, 'route')"
+        class="btn" href="#">Route</a>
+        <a v-on:click="changeClimbType($event, 'boulder')" class="btn" href="#">Boulder</a>
+        <a v-on:click="logout($event)" class="btn logout" href="#">Logout</a>
+      </div>
       <form id="sendRecorder" class="grid-form">
         <fieldset>
           <legend>Send a route</legend>
@@ -255,7 +266,7 @@
           <td class="progress">{{requirement.completed || 0}} / {{requirement.required}}</td>
         </tr>
       </table>
-      <div v-if="routes.length > 0">
+      <div>
         <div class="grid-form">
           <fieldset>
             <legend>Stats (strive for balance)</legend>

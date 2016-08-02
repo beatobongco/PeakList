@@ -92,15 +92,20 @@ h3 {
 .conn-stat .online {
   color: #2cc36b;
 }
-.logout {
-  display: block;
+.nav-bar {
+  margin-bottom: 15px;
+}
+.nav-bar .btn {
   text-decoration: none;
   color: black;
   border: 2px solid black;
   width: 75px;
   text-align: center;
   padding: 5px 0;
-  margin-left: auto;
+  display: inline-block;
+}
+.nav-bar .logout {
+  float: right;
 }
 .mid {
   text-align: center;
