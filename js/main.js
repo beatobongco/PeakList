@@ -389,7 +389,12 @@ var app = new Vue({
                 yAxes: [{
                   ticks: {
                     min: 0,
-                    stepSize: 1
+                    maxTicksLimit: 5,
+                    callback: function(value) {
+                      if(!(value % 1)) {
+                        return Number(value).toFixed(0)
+                      }
+                    }
                   }
                 }]
               }
