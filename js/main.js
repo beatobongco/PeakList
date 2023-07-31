@@ -147,9 +147,6 @@ var app = new Vue({
       if (value === "login" || value === "setup") {
         document.querySelector("input[name='username']").focus()
       }
-      else if (value === "record") {
-        document.querySelector("input[name='routeName']").focus()
-      }
       else if (value === "view") {
         this.checkPyramidComplete()
         this.calculateStats()
