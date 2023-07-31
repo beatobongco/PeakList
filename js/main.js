@@ -106,9 +106,9 @@ var app = new Vue({
       return [
         {id: "slab", statName: "SLAB", displayName: "Slab", color: "#0face1"},
         {id: "vertical", statName: "VERT", displayName: "Vertical", color: "#ef5728"},
-        {id: "slight-overhang", statName: "SLGT", displayName: "Slight overhang (10-20&deg;)", color: "#d2d1b3"},
-        {id: "moderate-overhang", statName: "MODR", displayName: "Moderate overhang (30-35&deg;)", color: "#363731"},
-        {id: "steep-overhang", statName: "HEVY", displayName: "Heavy overhang (~45&deg;)", color: "#fcea24"},
+        {id: "slight-overhang", statName: "SLGT", displayName: "Slight overhang (1-15&deg;)", color: "#d2d1b3"},
+        {id: "moderate-overhang", statName: "MODR", displayName: "Moderate overhang (15-30&deg;)", color: "#363731"},
+        {id: "steep-overhang", statName: "HEVY", displayName: "Heavy overhang (30-60&deg;)", color: "#fcea24"},
         {id: "roof", statName: "ROOF", displayName: "Roof", color: "#e2e2e2"}
       ]
     },
