@@ -126,7 +126,7 @@ var app = new Vue({
       return [
         {id: "redpoint", statName: "REDP", displayName: "Redpoint", color: "#aa231f"},
         {id: "flash", statName: "FLSH", displayName: "Flash", color: "#e3cb29"},
-        {id: "onsight", statName: "ONST", displayName: "On-sight", color: "#0face1"}
+        {id: "onsight", statName: "ONST", displayName: "Onsight", color: "#0face1"}
       ]
     },
     filterableGrades: function() {
@@ -444,7 +444,8 @@ var app = new Vue({
           obj[item.name] = item.value
           return obj
         }, {})
-
+      
+      data.routeWork = data.attempts === "1" ? "flash" : "redpoint" 
       this.db.insert(data)
       app.doBackup()
       // TODO: this causes the v-model for selectedGrade to not work

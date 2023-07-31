@@ -169,7 +169,7 @@
           <tr v-for="route in routes">
             <td class="progress">{{route.routeName}}</td>
             <td>{{route.grade}}</td>
-            <td>{{route.routeWork}}</td>
+            <td>{{route.attempts === "1" ? "FLSH" : `REDP: ${route.attempts || "?"}`}}</td>
           </tr>
         </table>
       </div>
@@ -188,10 +188,8 @@
               </select>
             </div>
             <div data-field-span="1">
-              <label for="routeWork">Route work</label>
-              <select name="routeWork" id="routeWork">
-                <option v-for="work in routeWorks" value="{{work.id}}">{{work.displayName}}</option>
-              </select>
+              <label for="attempts">Attempts</label>
+              <input type="number" name="attempts" id="attempts" min="1">
             </div>
             <div data-field-span="1">
               <label for="angle">Prominent angle</label>
@@ -269,9 +267,9 @@
               <label for="routeLength">Route length</label>
               <select name="routeLength" id="routeLength">
                 <option value="">Select length</option>
-                <option value="short">Short</option>
-                <option value="medium">Medium</option>
-                <option value="long">Long</option>
+                <option value="short">Short (B: &lt;5 moves, R: &lt;15 meters)</option>
+                <option value="medium">Medium (B: 6-15 moves, R: 15-35 meters)</option>
+                <option value="long">Long (B: &gt;15 moves ,R: &gt;35 meters)</option>
               </select>
             </div>
           </div>
