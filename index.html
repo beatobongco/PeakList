@@ -169,7 +169,7 @@
           <tr v-for="route in routes">
             <td class="progress">{{route.routeName}}</td>
             <td>{{route.grade}}</td>
-            <td>{{route.routeWork}}</td>
+            <td>{{route.attempts === "1" ? "FLSH" : `REDP: ${route.attempts || "?"}`}}</td>
           </tr>
         </table>
       </div>
@@ -188,10 +188,8 @@
               </select>
             </div>
             <div data-field-span="1">
-              <label for="routeWork">Route work</label>
-              <select name="routeWork" id="routeWork">
-                <option v-for="work in routeWorks" value="{{work.id}}">{{work.displayName}}</option>
-              </select>
+              <label for="attempts">Attempts</label>
+              <input type="number" name="attempts" id="attempts" min="1">
             </div>
             <div data-field-span="1">
               <label for="angle">Prominent angle</label>
@@ -222,35 +220,20 @@
               <label for="technique">Prominent technique</label>
               <select name="technique" id="technique">
                 <option value="">Select technique</option>
-                <option value="armbar">Arm bar</option>
-                <option value="balance">Balance</option>
-                <option value="backstep">Back step</option>
-                <option value="bump">Bump</option>
-                <option value="campus">Campus</option>
-                <option value="chestjam">Chest Jam</option>
-                <option value="chickenwing">Chicken Wing</option>
-                <option value="compression">Compression</option>
-                <option value="coordination">Coordination</option>
-                <option value="deadpoint">Deadpoint</option>
-                <option value="dropknee">Drop Knee</option>
-                <option value="dyno">Dyno</option>
-                <option value="figurefour">Figure Four</option>
-                <option value="fistjam">Fist Jam</option>
-                <option value="flag">Flag</option>
-                <option value="footjam">Foot Jam</option>
                 <option value="footwork">Footwork</option>
-                <option value="gaston">Gaston</option>
-                <option value="handjam">Hand Jam</option>
-                <option value="heelhook">Heel Hook</option>
-                <option value="heeltoe">Heel-toe Cam</option>
-                <option value="highstep">High Step</option>
-                <option value="lockoff">Lock-off</option>
+                <option value="balance">Balance</option>
+                <option value="bodyPositioning">Body Positioning</option>
+                <option value="flagging">Flagging</option>
+                <option value="dynamicMovements">Dynamic Movements</option>
+                <option value="staticMovements">Static Movements</option>
+                <option value="resting">Resting</option>
+                <option value="lockOffStrength">Lock-Off Strength</option>
+                <option value="endurance">Endurance</option>
+                <option value="stamina">Stamina</option>
+                <option value="heelToeHooks">Heel / Toe Hooks</option>
+                <option value="dropKnee">Drop Knee</option>
                 <option value="mantle">Mantle</option>
-                <option value="reach">Reach</option>
-                <option value="rockover">Rockover</option>
-                <option value="smear">Smear</option>
-                <option value="stem">Stem</option>
-                <option value="toehook">Toe Hook</option>
+                <option value="stemming">Stemming</option>
               </select>
             </div>
             <div data-field-span="1">
@@ -284,9 +267,9 @@
               <label for="routeLength">Route length</label>
               <select name="routeLength" id="routeLength">
                 <option value="">Select length</option>
-                <option value="short">Short</option>
-                <option value="medium">Medium</option>
-                <option value="long">Long</option>
+                <option value="short">Short (B: &lt;5 moves, R: &lt;15 meters)</option>
+                <option value="medium">Medium (B: 6-15 moves, R: 15-35 meters)</option>
+                <option value="long">Long (B: &gt;15 moves ,R: &gt;35 meters)</option>
               </select>
             </div>
           </div>

@@ -114,22 +114,19 @@ var app = new Vue({
     },
     holdTypes: function() {
       return [
-        {id: "crimp", statName: "CRMP", displayName: "Crimp", color: "#0face1"},
-        {id: "jib", statName: "JIB", displayName: "Jib", color: "#ef5728"},
-        {id: "jug", statName: "JUG", displayName: "Jug", color: "#d2d1b3"},
-        {id: "mono", statName: "MONO", displayName: "Mono", color: "#363731"},
-        {id: "pinch", statName: "PNCH", displayName: "Pinch", color: "#fcea24"},
-        {id: "pocket", statName: "POCK", displayName: "Pocket", color: "#e2e2e2"},
-        {id: "sidepull", statName: "SIDE", displayName: "Sidepull", color: "#e3cb29"},
-        {id: "sloper", statName: "SLOP", displayName: "Sloper", color: "#aa231f"},
-        {id: "undercling", statName: "UNDR", displayName: "Undercling", color: "#000"}
+        {id: "jug", statName: "JUG", displayName: "Jug", color: "#0face1"},
+        {id: "crimp", statName: "CRMP", displayName: "Crimp", color: "#ef5728"},
+        {id: "tiny-crimp", statName: "TCRM", displayName: "Tiny Crimp", color: "#d2d1b3"},
+        {id: "pinch", statName: "PNCH", displayName: "Pinch", color: "#363731"},
+        {id: "sloper", statName: "SLOP", displayName: "Sloper", color: "#fcea24"},
+        {id: "pocket", statName: "POCK", displayName: "Pocket", color: "#e2e2e2"}
       ]
     },
     routeWorks: function() {
       return [
         {id: "redpoint", statName: "REDP", displayName: "Redpoint", color: "#aa231f"},
         {id: "flash", statName: "FLSH", displayName: "Flash", color: "#e3cb29"},
-        {id: "onsight", statName: "ONST", displayName: "On-sight", color: "#0face1"}
+        {id: "onsight", statName: "ONST", displayName: "Onsight", color: "#0face1"}
       ]
     },
     filterableGrades: function() {
@@ -444,7 +441,8 @@ var app = new Vue({
           obj[item.name] = item.value
           return obj
         }, {})
-
+      
+      data.routeWork = data.attempts === "1" ? "flash" : "redpoint" 
       this.db.insert(data)
       app.doBackup()
       // TODO: this causes the v-model for selectedGrade to not work
