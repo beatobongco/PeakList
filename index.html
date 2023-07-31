@@ -105,7 +105,7 @@
         <a v-on:click="changeClimbType($event, 'boulder')" class="btn" href="#">Boulder</a>
         <a v-on:click="logout($event)" class="btn logout" href="#">Logout</a>
       </div>
-      <p class="mid title">{{climbType.toUpperCase()}} PYRAMID</p>
+      <p class="mid title">{{now}} {{climbType.toUpperCase()}} PYRAMID</p>
       <div class="pyramid-container">
         <div class="pyramid outline">
           <div class="shape one"></div>
@@ -167,9 +167,10 @@
         <p class="mid">{{routes.length}} ROUTES SENT</p>
         <table>
           <tr v-for="route in routes">
+            <td>{{route.date}}</td>
             <td class="progress">{{route.routeName}}</td>
             <td>{{route.grade}}</td>
-            <td>{{route.attempts === "1" ? "FLSH" : `REDP: ${route.attempts || "?"}`}}</td>
+            <td>{{route.attempts === "1" ? "FLSH" : `RDPT${route.attempts ? ": " + route.attempts : ""}`}}</td>
           </tr>
         </table>
       </div>

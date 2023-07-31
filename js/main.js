@@ -64,6 +64,7 @@ function generateHueco() {
 const DEFAULT_GRADES = generateFrench()
 function initialData() {
   return {
+    now: null,
     email: null,
     isConnected: true,
     justRegistered: false,
@@ -124,7 +125,7 @@ var app = new Vue({
     },
     routeWorks: function() {
       return [
-        {id: "redpoint", statName: "REDP", displayName: "Redpoint", color: "#aa231f"},
+        {id: "redpoint", statName: "RDPT", displayName: "Redpoint", color: "#aa231f"},
         {id: "flash", statName: "FLSH", displayName: "Flash", color: "#e3cb29"},
         {id: "onsight", statName: "ONST", displayName: "Onsight", color: "#0face1"}
       ]
@@ -224,7 +225,6 @@ var app = new Vue({
     },
     calculatePyramid: function(onSightLevel, climbType) {
       var requirements = []
-      var reps = 1
       var grades = this.grades
 
       if (climbType === "boulder") {
@@ -323,7 +323,9 @@ var app = new Vue({
       var fulfilled = true
       for (var i = 0; i < this.requirements.length; i++) {
         var r = this.requirements[i]
-        var numComplete = this.db({grade: r.grade}).count()
+        let now = new Date()        
+        this.now = now.toISOString().split('T')[0]
+        var numComplete = this.db({grade: r.grade, date: this.now}).count()
 
         r.completed = numComplete
         this.requirements.$set(i, _.clone(r))
@@ -446,13 +448,17 @@ var app = new Vue({
         }, {})
       
       data.routeWork = data.attempts === "1" ? "flash" : "redpoint" 
+      
+      let now = new Date()
+      data.date = now.toISOString().split('T')[0]  
+      
       this.db.insert(data)
       app.doBackup()
       // TODO: this causes the v-model for selectedGrade to not work
       $('#sendRecorder')[0].reset()
       this.changeMode("view")
     }
-  },
+  }
 })
 
 firebase.auth().onAuthStateChanged(function(user) {
