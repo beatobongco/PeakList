@@ -52,7 +52,7 @@ function generateFrench() {
 
 function generateHueco() {
   var g = ["VB"]
-  var limit = 15
+  var limit = 17
   var current = 0
   while (current !== limit + 1) {
     g.push("V" + current)
@@ -61,6 +61,7 @@ function generateHueco() {
   return g
 }
 
+const DEFAULT_GRADES = generateFrench()
 function initialData() {
   return {
     email: null,
@@ -68,7 +69,8 @@ function initialData() {
     justRegistered: false,
     userId: null,
     mode: "loading",
-    grades: generateFrench(),
+    selectedGrade: DEFAULT_GRADES[0],
+    grades: DEFAULT_GRADES,
     gradingSystem: null,
     requirements: [],
     db: TAFFY(),
@@ -154,6 +156,9 @@ var app = new Vue({
       if (value === true && app.db && app.db().get().length > 0) {
         app.doBackup()
       }
+    },
+    grades: function (value) {
+      this.selectedGrade = value[0]
     }
   },
   methods: {
@@ -222,13 +227,20 @@ var app = new Vue({
       if (climbType === "boulder") {
         grades = generateHueco()
       }
-
-      for (var i = 4; i > 0; i--) {
-        //start at top of pyramid
-        var base = grades[grades.indexOf(onSightLevel) + i]
-        requirements.push({grade: base, required: reps})
-        reps = reps * 2
-      }
+      
+      var pyramid = [
+        { gradeModifier: 1, required: 1 },
+        { gradeModifier: 0, required: 2 }, // onsight level
+        { gradeModifier: -1, required: 4 },
+        { gradeModifier: -2, required: 8 }
+      ]
+      var onsightGrade = grades.indexOf(onSightLevel)
+      pyramid.forEach(level => {
+        var grade = onsightGrade + level.gradeModifier
+        if (grade >= 0) {
+          requirements.push({ grade: grades[grade], required: level.required })
+        }
+      })
       return requirements
     },
     firebaseListen() {
@@ -423,24 +435,8 @@ var app = new Vue({
         app.calculateStat("routeWork", "doughnut", grade)
       }.bind(this, grade), 100)
     },
-    upgradePyramid: function() {
-      //find highest grade in req
-      var r = this.requirements
-      var g = this.grades
-      var index = g.indexOf(r[0].grade)
-
-      //New tip
-      this.requirements.unshift({
-        grade: g[index + 1],
-        required: 1
-      })
-      this.requirements.pop()
-
-      for (var i = 1; i <= 3; i++) {
-        var increment = i === 3 ? 4 : i
-        this.requirements[i].required = this.requirements[i].required + increment
-      }
-
+    upgradePyramid: function () {
+      this.requirements = this.calculatePyramid(this.requirements[0].grade, this.climbType)
       app.doBackup()
     },
     recordSend: function(e) {
@@ -455,7 +451,7 @@ var app = new Vue({
       app.doBackup()
       $('#sendRecorder')[0].reset()
     }
-  }
+  },
 })
 
 firebase.auth().onAuthStateChanged(function(user) {

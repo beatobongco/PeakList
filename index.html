@@ -111,8 +111,9 @@
           <div data-row-span="4">
             <div data-field-span="1">
               <label for="grade">Grade</label>
-              <select name="grade" id="grade">
-                <option v-for="grade in grades" value="{{grade}}">{{grade}}</option>
+              <select name="grade" id="grade" v-model="selectedGrade">
+                <option v-for="grade in grades" v-bind:value="grade" :selected="grade === selectedGrade">{{grade}}
+                </option>
               </select>
             </div>
             <div data-field-span="1">
