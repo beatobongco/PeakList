@@ -1,4 +1,5 @@
 <html>
+
 <head>
   <title>PeakList</title>
   <meta name="version" content="1.0.0">
@@ -10,17 +11,19 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="http://beatobongco.com/PeakList/" />
   <meta property="og:image" content="http://beatobongco.com/PeakList/img/og_image.png" />
-  <meta property="og:description" content="A minimalist app that records data about the routes you send and progressively recommends grades to try next." />
-  <meta name="description" content="A minimalist app that records data about the routes you send and progressively recommends grades to try next.">
+  <meta property="og:description"
+    content="A minimalist app that records data about the routes you send and progressively recommends grades to try next." />
+  <meta name="description"
+    content="A minimalist app that records data about the routes you send and progressively recommends grades to try next.">
   <link rel="stylesheet" type="text/css" href="css/libs/gridforms/1.0.10/gridforms.min.css">
   <link href='css/fonts.css' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="css/libs/animate.css/3.5.2/animate.min.css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
+
 <body>
   <div id="tickList" v-cloak>
-    <div v-if="mode === 'landing' || mode === 'login'"
-      class="landing">
+    <div v-if="mode === 'landing' || mode === 'login'" class="landing">
       <div class="logo-container">
         <div class="logo">
           <div class="shape one"></div>
@@ -34,11 +37,7 @@
         <button v-on:click="changeMode('login')">Login</button>
         <button v-on:click="changeMode('setup')">Signup</button>
       </div>
-      <form
-        v-if="mode === 'login'"
-        id="loginForm"
-        class="grid-form"
-        >
+      <form v-if="mode === 'login'" id="loginForm" class="grid-form">
         <fieldset>
           <legend></legend>
           <div data-row-span="2">
@@ -56,11 +55,7 @@
         <button v-on:click="changeMode('landing', $event)">Back</button>
       </form>
     </div>
-    <form
-      v-if="mode === 'setup'"
-      id="setupForm"
-      class="grid-form"
-      >
+    <form v-if="mode === 'setup'" id="setupForm" class="grid-form">
       <fieldset>
         <legend>PeakList Setup</legend>
         <div data-row-span="3">
@@ -106,20 +101,13 @@
         <span v-if="!isConnected" class="offline">offline</span>
       </p>
       <div class="nav-bar">
-        <a v-on:click="changeClimbType($event, 'route')"
-        class="btn" href="#">Route</a>
+        <a v-on:click="changeClimbType($event, 'route')" class="btn" href="#">Route</a>
         <a v-on:click="changeClimbType($event, 'boulder')" class="btn" href="#">Boulder</a>
         <a v-on:click="logout($event)" class="btn logout" href="#">Logout</a>
       </div>
       <form id="sendRecorder" class="grid-form">
         <fieldset>
           <legend>Send a {{climbType}}</legend>
-          <div data-row-span="1">
-            <div data-field-span="1">
-              <label for="routeName">Route name</label>
-              <input name="routeName" id="routeName" type="text">
-            </div>
-          </div>
           <div data-row-span="4">
             <div data-field-span="1">
               <label for="grade">Grade</label>
@@ -134,40 +122,30 @@
               </select>
             </div>
             <div data-field-span="1">
-              <label for="indoorOrOutdoor">Indoor or outdoor</label>
-              <select name="indoorOrOutdoor" id="indoorOrOutdoor">
-                <option value="indoor">Indoor</option>
-                <option value="outdoor">Outdoor</option>
+              <label for="angle">Prominent angle</label>
+              <select name="angle" id="angle">
+                <option value="">Select angle</option>
+                <option v-for="angle in angles" value="{{ angle.id}}">{{{angle.displayName}}}</option>
               </select>
             </div>
             <div data-field-span="1">
-              <label for="topRopeOrLead">Top rope or lead</label>
-              <select name="topRopeOrLead" id="topRopeOrLead">
-                <option value="toprope">Top rope</option>
-                <option value="lead">Lead</option>
+              <label for="holdType">Prominent hold type</label>
+              <select name="holdType" id="holdType">
+                <option value="">Select hold type</option>
+                <option v-for="hold in holdTypes" value="{{ hold.id}}">{{{hold.displayName}}}</option>
               </select>
             </div>
           </div>
         </fieldset>
         <fieldset>
-          <legend>Optional route data</legend>
-          <div data-row-span="4">
+          <legend>Extra data (optional)</legend>
+          <div data-row-span="1">
             <div data-field-span="1">
-              <label for="holdType">Prominent hold type</label>
-              <select name="holdType" id="holdType">
-                <option value="">Select type</option>
-                <option v-for="hold in holdTypes" value="{{ hold.id}}">{{{hold.displayName}}}</option>
-              </select>
+              <label for="routeName">Route name</label>
+              <input name="routeName" id="routeName" type="text">
             </div>
-            <div data-field-span="1">
-              <label for="routeLength">Route length</label>
-              <select name="routeLength" id="routeLength">
-                <option value="">Select length</option>
-                <option value="short">Short</option>
-                <option value="medium">Medium</option>
-                <option value="long">Long</option>
-              </select>
-            </div>
+          </div>
+          <div data-row-span="2">
             <div data-field-span="1">
               <label for="cruxLocation">Crux location</label>
               <select name="cruxLocation" id="cruxLocation">
@@ -177,15 +155,6 @@
                 <option value="end">End</option>
               </select>
             </div>
-            <div data-field-span="1">
-              <label for="angle">Prominent angle</label>
-              <select name="angle" id="angle">
-                <option value="">Select angle</option>
-                <option v-for="angle in angles" value="{{ angle.id}}">{{{angle.displayName}}}</option>
-              </select>
-            </div>
-          </div>
-          <div data-row-span="1">
             <div data-field-span="1">
               <label for="technique">Prominent technique</label>
               <select name="technique" id="technique">
@@ -198,6 +167,7 @@
                 <option value="chestjam">Chest Jam</option>
                 <option value="chickenwing">Chicken Wing</option>
                 <option value="compression">Compression</option>
+                <option value="coordination">Coordination</option>
                 <option value="deadpoint">Deadpoint</option>
                 <option value="dropknee">Drop Knee</option>
                 <option value="dyno">Dyno</option>
@@ -218,6 +188,33 @@
                 <option value="smear">Smear</option>
                 <option value="stem">Stem</option>
                 <option value="toehook">Toe Hook</option>
+              </select>
+            </div>
+          </div>
+          <div data-row-span="3">
+            <div data-field-span="1">
+              <label for="indoorOrOutdoor">Indoor or outdoor</label>
+              <select name="indoorOrOutdoor" id="indoorOrOutdoor">
+                <option value="">Select</option>
+                <option value="indoor">Indoor</option>
+                <option value="outdoor">Outdoor</option>
+              </select>
+            </div>
+            <div data-field-span="1">
+              <label for="topRopeOrLead">Top rope or lead</label>
+              <select name="topRopeOrLead" id="topRopeOrLead">
+                <option value="">Select</option>
+                <option value="toprope">Top rope</option>
+                <option value="lead">Lead</option>
+              </select>
+            </div>
+            <div data-field-span="1">
+              <label for="routeLength">Route length</label>
+              <select name="routeLength" id="routeLength">
+                <option value="">Select length</option>
+                <option value="short">Short</option>
+                <option value="medium">Medium</option>
+                <option value="long">Long</option>
               </select>
             </div>
           </div>
@@ -243,19 +240,15 @@
           <div class="grade top-middle">{{requirements[1].grade}}</div>
           <div class="grade bottom-middle">{{requirements[2].grade}}</div>
           <div class="grade bottom">{{requirements[3].grade}}</div>
-          <div class="shape one"
-            v-if="requirements[0].completed >= 1"></div>
+          <div class="shape one" v-if="requirements[0].completed >= 1"></div>
           <div class="shape one" v-else style="visibility: hidden"></div>
-          <div class="shape two"
-            v-if="requirements[1].completed >= 1"
+          <div class="shape two" v-if="requirements[1].completed >= 1"
             style="width: {{(requirements[1].completed / 2) * (pyramidSides * 2)}}px"></div>
           <div class="shape two" v-else style="visibility: hidden"></div>
-          <div class="shape three"
-            v-if="requirements[2].completed >= 1"
+          <div class="shape three" v-if="requirements[2].completed >= 1"
             style="width: {{(requirements[2].completed / 4) * (pyramidSides * 4)}}px"></div>
           <div class="shape three" v-else style="visibility: hidden"></div>
-          <div class="shape four"
-            v-if="requirements[3].completed >= 1"
+          <div class="shape four" v-if="requirements[3].completed >= 1"
             style="width: {{(requirements[3].completed / 8) * (pyramidSides * 6)}}px"></div>
           <div class="shape four" v-else style="visibility: hidden"></div>
         </div>
@@ -322,4 +315,5 @@
   <script type="text/javascript" src="js/service-worker-registration.js"></script>
   <script type="text/javascript" src="js/main.js"></script>
 </body>
+
 </html>
