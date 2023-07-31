@@ -114,15 +114,12 @@ var app = new Vue({
     },
     holdTypes: function() {
       return [
-        {id: "crimp", statName: "CRMP", displayName: "Crimp", color: "#0face1"},
-        {id: "jib", statName: "JIB", displayName: "Jib", color: "#ef5728"},
-        {id: "jug", statName: "JUG", displayName: "Jug", color: "#d2d1b3"},
-        {id: "mono", statName: "MONO", displayName: "Mono", color: "#363731"},
-        {id: "pinch", statName: "PNCH", displayName: "Pinch", color: "#fcea24"},
-        {id: "pocket", statName: "POCK", displayName: "Pocket", color: "#e2e2e2"},
-        {id: "sidepull", statName: "SIDE", displayName: "Sidepull", color: "#e3cb29"},
-        {id: "sloper", statName: "SLOP", displayName: "Sloper", color: "#aa231f"},
-        {id: "undercling", statName: "UNDR", displayName: "Undercling", color: "#000"}
+        {id: "jug", statName: "JUG", displayName: "Jug", color: "#0face1"},
+        {id: "crimp", statName: "CRMP", displayName: "Crimp", color: "#ef5728"},
+        {id: "tiny-crimp", statName: "TCRM", displayName: "Tiny Crimp", color: "#d2d1b3"},
+        {id: "pinch", statName: "PNCH", displayName: "Pinch", color: "#363731"},
+        {id: "sloper", statName: "SLOP", displayName: "Sloper", color: "#fcea24"},
+        {id: "pocket", statName: "POCK", displayName: "Pocket", color: "#e2e2e2"}
       ]
     },
     routeWorks: function() {
