@@ -152,6 +152,7 @@ var app = new Vue({
       }
       else if (value === "view") {
         this.checkPyramidComplete()
+        this.calculateStats()
       }
     },
     isConnected: function(value) {
@@ -190,7 +191,6 @@ var app = new Vue({
 
         app.checkPyramidComplete()
         app.calculateStats()
-
       })
     },
     logout: function(e) {
