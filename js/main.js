@@ -394,47 +394,39 @@ var app = new Vue({
 
       if (ctx) {
         var c = app[stat + "Chart"]
-        if (c) {
-          c.data.labels = labels
-          c.data.datasets[0].data = data
-          c.data.datasets[0].backgroundColor = colors
-          c.update()
-        }
-        else {
-          if (chartType === "bar") {
-            options = {
-              legend: {
-                display: false,
-              },
-              scales: {
-                yAxes: [{
-                  ticks: {
-                    min: 0,
-                    maxTicksLimit: 5,
-                    callback: function(value) {
-                      if(!(value % 1)) {
-                        return Number(value).toFixed(0)
-                      }
+        if (chartType === "bar") {
+          options = {
+            legend: {
+              display: false,
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  min: 0,
+                  maxTicksLimit: 5,
+                  callback: function(value) {
+                    if(!(value % 1)) {
+                      return Number(value).toFixed(0)
                     }
                   }
-                }]
-              }
+                }
+              }]
             }
           }
-
-          app[stat + "Chart"] = new Chart(ctx, {
-            type: chartType,
-            data: {
-              labels: labels,
-              datasets: [
-                {
-                  data: data,
-                  backgroundColor: colors
-                }]
-            },
-            options: options,
-          })
         }
+
+        app[stat + "Chart"] = new Chart(ctx, {
+          type: chartType,
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: data,
+                backgroundColor: colors
+              }]
+          },
+          options: options,
+        })
       }
     },
     calculateStats: function(grade) {
@@ -442,7 +434,7 @@ var app = new Vue({
         app.calculateStat("angle", "bar", grade, true)
         app.calculateStat("holdType", "bar", grade, true)
         app.calculateStat("routeWork", "doughnut", grade)
-      }.bind(this, grade), 100)
+      }.bind(this, grade), 200)
     },
     upgradePyramid: function () {
       this.requirements = this.calculatePyramid(this.requirements[0].grade, this.climbType)
