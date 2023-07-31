@@ -93,7 +93,7 @@
       <button type="submit" v-on:click="doSetup($event)">Signup</button>
       <button v-on:click="changeMode('landing', $event)">Back</button>
     </form>
-    <div v-if="mode === 'record'" class="record-container">
+    <div v-if="mode === 'view'" class="record-container">
       <p class="conn-stat">
         <span>{{ email }} | </span>
         <span>Status:</span>
@@ -105,9 +105,80 @@
         <a v-on:click="changeClimbType($event, 'boulder')" class="btn" href="#">Boulder</a>
         <a v-on:click="logout($event)" class="btn logout" href="#">Logout</a>
       </div>
+      <p class="mid title">{{climbType.toUpperCase()}} PYRAMID</p>
+      <div class="pyramid-container">
+        <div class="pyramid outline">
+          <div class="shape one"></div>
+          <div class="shape two"></div>
+          <div class="shape three"></div>
+          <div class="shape four"></div>
+        </div>
+        <div class="pyramid main">
+          <div class="grade top">{{requirements[0].grade}}</div>
+          <div class="grade top-middle">{{requirements[1].grade}}</div>
+          <div class="grade bottom-middle">{{requirements[2].grade}}</div>
+          <div class="grade bottom">{{requirements[3].grade}}</div>
+          <div class="shape one" v-if="requirements[0].completed >= 1"></div>
+          <div class="shape one" v-else style="visibility: hidden"></div>
+          <div class="shape two" v-if="requirements[1].completed >= 1"
+            style="width: {{(requirements[1].completed / 2) * (pyramidSides * 2)}}px"></div>
+          <div class="shape two" v-else style="visibility: hidden"></div>
+          <div class="shape three" v-if="requirements[2].completed >= 1"
+            style="width: {{(requirements[2].completed / 4) * (pyramidSides * 4)}}px"></div>
+          <div class="shape three" v-else style="visibility: hidden"></div>
+          <div class="shape four" v-if="requirements[3].completed >= 1"
+            style="width: {{(requirements[3].completed / 8) * (pyramidSides * 6)}}px"></div>
+          <div class="shape four" v-else style="visibility: hidden"></div>
+        </div>
+      </div>
+      <table>
+        <tr v-for="requirement in requirements">
+          <td>{{requirement.grade}}</td>
+          <td class="progress">{{requirement.completed || 0}} / {{requirement.required}}</td>
+        </tr>
+      </table>
+      <div>
+        <div class="grid-form">
+          <fieldset>
+            <legend>Stats (strive for balance)</legend>
+            <div data-row-span="1">
+              <div data-field-span="1">
+                <label for="gradeStatSelector">Select a grade</label>
+                <select id="gradeStatSelector" v-on:change="onGradeFilterChange($event)">
+                  <option value="">All grades</option>
+                  <option v-for="grade in filterableGrades" value="{{grade}}">{{grade}}</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <p class="mid">ANGLE</p>
+        <div class="canvas-container">
+          <canvas id="angleChart"></canvas>
+        </div>
+        <p class="mid">HOLD TYPE</p>
+        <div class="canvas-container">
+          <canvas id="holdTypeChart"></canvas>
+        </div>
+        <p class="mid">WORK</p>
+        <div class="canvas-container">
+          <canvas id="routeWorkChart"></canvas>
+        </div>
+        <p class="mid">{{routes.length}} ROUTES SENT</p>
+        <table>
+          <tr v-for="route in routes">
+            <td class="progress">{{route.routeName}}</td>
+            <td>{{route.grade}}</td>
+            <td>{{route.routeWork}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div v-if="mode === 'record'" class="record-container">
+      <button class="btn-close" @click="changeMode('view')">&#10006;</button>
       <form id="sendRecorder" class="grid-form">
         <fieldset>
-          <legend>Send a {{climbType}}</legend>
+          <legend>Log a {{climbType}}</legend>
           <div data-row-span="4">
             <div data-field-span="1">
               <label for="grade">Grade</label>
@@ -228,74 +299,6 @@
         </fieldset>
         <button v-on:click="recordSend">Record</button>
       </form>
-      <p class="mid title">ROUTE PYRAMID</p>
-      <div class="pyramid-container">
-        <div class="pyramid outline">
-          <div class="shape one"></div>
-          <div class="shape two"></div>
-          <div class="shape three"></div>
-          <div class="shape four"></div>
-        </div>
-        <div class="pyramid main">
-          <div class="grade top">{{requirements[0].grade}}</div>
-          <div class="grade top-middle">{{requirements[1].grade}}</div>
-          <div class="grade bottom-middle">{{requirements[2].grade}}</div>
-          <div class="grade bottom">{{requirements[3].grade}}</div>
-          <div class="shape one" v-if="requirements[0].completed >= 1"></div>
-          <div class="shape one" v-else style="visibility: hidden"></div>
-          <div class="shape two" v-if="requirements[1].completed >= 1"
-            style="width: {{(requirements[1].completed / 2) * (pyramidSides * 2)}}px"></div>
-          <div class="shape two" v-else style="visibility: hidden"></div>
-          <div class="shape three" v-if="requirements[2].completed >= 1"
-            style="width: {{(requirements[2].completed / 4) * (pyramidSides * 4)}}px"></div>
-          <div class="shape three" v-else style="visibility: hidden"></div>
-          <div class="shape four" v-if="requirements[3].completed >= 1"
-            style="width: {{(requirements[3].completed / 8) * (pyramidSides * 6)}}px"></div>
-          <div class="shape four" v-else style="visibility: hidden"></div>
-        </div>
-      </div>
-      <table>
-        <tr v-for="requirement in requirements">
-          <td>{{requirement.grade}}</td>
-          <td class="progress">{{requirement.completed || 0}} / {{requirement.required}}</td>
-        </tr>
-      </table>
-      <div>
-        <div class="grid-form">
-          <fieldset>
-            <legend>Stats (strive for balance)</legend>
-            <div data-row-span="1">
-              <div data-field-span="1">
-                <label for="gradeStatSelector">Select a grade</label>
-                <select id="gradeStatSelector" v-on:change="onGradeFilterChange($event)">
-                  <option value="">All grades</option>
-                  <option v-for="grade in filterableGrades" value="{{grade}}">{{grade}}</option>
-                </select>
-              </div>
-            </div>
-          </fieldset>
-        </div>
-        <p class="mid">ANGLE</p>
-        <div class="canvas-container">
-          <canvas id="angleChart"></canvas>
-        </div>
-        <p class="mid">HOLD TYPE</p>
-        <div class="canvas-container">
-          <canvas id="holdTypeChart"></canvas>
-        </div>
-        <p class="mid">WORK</p>
-        <div class="canvas-container">
-          <canvas id="routeWorkChart"></canvas>
-        </div>
-        <p class="mid">{{routes.length}} ROUTES SENT</p>
-        <table>
-          <tr v-for="route in routes">
-            <td class="progress">{{route.routeName}}</td>
-            <td>{{route.grade}}</td>
-            <td>{{route.routeWork}}</td>
-          </tr>
-        </table>
-      </div>
     </div>
     <div v-if="mode === 'loading'" class="loading-container">
       <div class="sk-folding-cube">
@@ -306,6 +309,7 @@
       </div>
       <h2>LOADING...</h2>
     </div>
+    <div v-if="mode === 'view'" class="fab" @click="recordMode">+</div>
   </div>
   <script type="text/javascript" src="js/libs/Chart.js/2.1.6/Chart.min.js"></script>
   <script type="text/javascript" src="js/libs/fastclick/1.0.6/fastclick.min.js"></script>
