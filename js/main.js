@@ -78,7 +78,7 @@ function initialData() {
     angleChart: null,
     holdTypeChart: null,
     routeWorkChart: null,
-    climbType: "route",
+    climbType: "boulder",
     routeOnsight: null,
     boulderOnsight: null,
   }

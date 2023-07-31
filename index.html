@@ -101,8 +101,10 @@
         <span v-if="!isConnected" class="offline">offline</span>
       </p>
       <div class="nav-bar">
-        <a v-on:click="changeClimbType($event, 'route')" class="btn" href="#">Route</a>
-        <a v-on:click="changeClimbType($event, 'boulder')" class="btn" href="#">Boulder</a>
+        <a v-on:click="changeClimbType($event, 'route')" :class="{btn: true, selected: climbType === 'route'}"
+          href="#">Route</a>
+        <a v-on:click="changeClimbType($event, 'boulder')" :class="{btn: true, selected: climbType === 'boulder'}"
+          href="#">Boulder</a>
         <a v-on:click="logout($event)" class="btn logout" href="#">Logout</a>
       </div>
       <p class="mid title">{{now}} {{climbType.toUpperCase()}} PYRAMID</p>

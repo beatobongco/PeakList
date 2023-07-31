@@ -394,6 +394,11 @@ h3 {
   background-color: #FF5252;
 }
 
+.btn.selected {
+  background-color: black;
+  color: white;
+}
+
 .btn-close {
   border: 0;
   width: 18px;
