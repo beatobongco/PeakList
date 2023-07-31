@@ -290,8 +290,9 @@
         <p class="mid">{{routes.length}} ROUTES SENT</p>
         <table>
           <tr v-for="route in routes">
-            <td>{{route.grade}}</td>
             <td class="progress">{{route.routeName}}</td>
+            <td>{{route.grade}}</td>
+            <td>{{route.routeWork}}</td>
           </tr>
         </table>
       </div>
