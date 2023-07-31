@@ -323,9 +323,7 @@ var app = new Vue({
       var fulfilled = true
       for (var i = 0; i < this.requirements.length; i++) {
         var r = this.requirements[i]
-        let now = new Date()        
-        this.now = now.toISOString().split('T')[0]
-        var numComplete = this.db({grade: r.grade, date: this.now}).count()
+        var numComplete = this.db({grade: r.grade}).count()
 
         r.completed = numComplete
         this.requirements.$set(i, _.clone(r))
