@@ -1,26 +1,31 @@
 [v-cloak] {
   display: none;
 }
+
 body {
   max-width: 1024px;
   margin: 0 auto;
   overflow-x: hidden;
   padding: 10px;
 }
+
 #tickList {
   max-width: 100%;
   margin: 0 auto;
   position: relative;
 }
+
 body,
 input,
 textarea,
 select {
   font-family: 'Fira Sans', sans-serif;
 }
+
 fieldset {
   margin-bottom: 25px !important;
 }
+
 button {
   cursor: pointer;
   width: 100%;
@@ -30,37 +35,47 @@ button {
   font-size: 22px;
   font-weight: 700;
 }
+
 button:hover {
   opacity: .7;
 }
+
 table {
   margin: 25px auto;
 }
+
 table .progress {
   padding-left: 15px;
 }
+
 h3 {
   text-align: center;
 }
+
 .canvas-container {
   max-width: 500px;
   margin: auto;
 }
+
 #setupForm button {
   margin: 10px auto;
 }
+
 .landing .logo-container {
   text-align: center;
   margin: 25px 0;
 }
+
 .landing .logo-container h1 {
   margin: 0;
   font-weight: 300;
   text-align: center;
 }
+
 .landing .logo-container .logo {
   position: relative;
 }
+
 .landing .logo-container .logo .shape {
   margin: auto;
   height: 0;
@@ -68,39 +83,49 @@ h3 {
   border-right: 10px solid transparent;
   border-bottom: 15px solid;
 }
+
 .landing .logo-container .logo .shape.one {
   width: 0;
   border-bottom-color: #0face1;
 }
+
 .landing .logo-container .logo .shape.two {
   border-bottom-color: #ef5728;
   width: 20px;
 }
+
 .landing .logo-container .logo .shape.three {
   border-bottom-color: #d2d1b3;
   width: 40px;
 }
+
 .landing .logo-container .logo .shape.four {
   border-bottom-color: #363731;
   width: 60px;
 }
+
 .landing button {
   margin: 10px auto;
 }
+
 .conn-stat {
   text-align: center;
   font-weight: 400;
   font-size: 12px;
 }
+
 .conn-stat .offline {
   color: #c0392b;
 }
+
 .conn-stat .online {
   color: #2cc36b;
 }
+
 .nav-bar {
   margin-bottom: 15px;
 }
+
 .nav-bar .btn {
   text-decoration: none;
   color: black;
@@ -110,23 +135,29 @@ h3 {
   padding: 5px 0;
   display: inline-block;
 }
+
 .nav-bar .logout {
   float: right;
 }
+
 .mid {
   text-align: center;
   font-weight: 300;
 }
+
 .mid.title {
   font-weight: 600;
 }
+
 .pyramid-container {
   position: relative;
 }
+
 .pyramid.main {
   margin: 25px 0;
   position: relative;
 }
+
 .pyramid.main .shape {
   margin: auto;
   height: 0;
@@ -136,25 +167,31 @@ h3 {
   z-index: 100;
   max-width: 228px;
 }
+
 .pyramid.main .shape:hover {
   opacity: .8;
 }
+
 .pyramid.main .shape.one {
   width: 0;
   border-bottom-color: #0face1;
 }
+
 .pyramid.main .shape.two {
   border-bottom-color: #ef5728;
   width: 76px;
 }
+
 .pyramid.main .shape.three {
   border-bottom-color: #d2d1b3;
   width: 152px;
 }
+
 .pyramid.main .shape.four {
   border-bottom-color: #363731;
   width: 228px;
 }
+
 .pyramid.main .grade {
   color: #fff;
   z-index: 101;
@@ -162,18 +199,23 @@ h3 {
   left: 50%;
   margin-left: -10px;
 }
+
 .pyramid.main .grade.top {
   top: 12%;
 }
+
 .pyramid.main .grade.top-middle {
   top: 33%;
 }
+
 .pyramid.main .grade.bottom-middle {
   top: 58%;
 }
+
 .pyramid.main .grade.bottom {
   top: 83%;
 }
+
 .pyramid.outline {
   position: absolute;
   width: 100%;
@@ -181,6 +223,7 @@ h3 {
   z-index: 0;
   bottom: -25px;
 }
+
 .pyramid.outline .shape {
   margin: auto;
   height: 0;
@@ -189,29 +232,37 @@ h3 {
   border-bottom: 48px solid #000000;
   z-index: 99;
 }
+
 .pyramid.outline .shape:hover {
   opacity: .8;
 }
+
 .pyramid.outline .shape.one {
   width: 0;
 }
+
 .pyramid.outline .shape.two {
   width: 76px;
 }
+
 .pyramid.outline .shape.three {
   width: 152px;
 }
+
 .pyramid.outline .shape.four {
   width: 228px;
 }
+
 .loading-container {
   margin: 35px 0;
 }
+
 .loading-container h2 {
   margin-top: 25px;
   font-weight: 300;
   text-align: center;
 }
+
 .sk-folding-cube {
   margin: 20px auto;
   width: 40px;
@@ -220,6 +271,7 @@ h3 {
   -webkit-transform: rotateZ(45deg);
   transform: rotateZ(45deg);
 }
+
 .sk-folding-cube .sk-cube {
   float: left;
   width: 50%;
@@ -229,6 +281,7 @@ h3 {
   -ms-transform: scale(1.1);
   transform: scale(1.1);
 }
+
 .sk-folding-cube .sk-cube:before {
   content: '';
   position: absolute;
@@ -242,55 +295,69 @@ h3 {
   -ms-transform-origin: 100% 100%;
   transform-origin: 100% 100%;
 }
+
 .sk-folding-cube .sk-cube1:before {
   background-color: #0face1;
 }
+
 .sk-folding-cube .sk-cube2 {
   -webkit-transform: scale(1.1) rotateZ(90deg);
   transform: scale(1.1) rotateZ(90deg);
 }
+
 .sk-folding-cube .sk-cube2:before {
   background-color: #ef5728;
 }
+
 .sk-folding-cube .sk-cube3 {
   -webkit-transform: scale(1.1) rotateZ(180deg);
   transform: scale(1.1) rotateZ(180deg);
 }
+
 .sk-folding-cube .sk-cube3:before {
   background-color: #d2d1b3;
 }
+
 .sk-folding-cube .sk-cube4 {
   -webkit-transform: scale(1.1) rotateZ(270deg);
   transform: scale(1.1) rotateZ(270deg);
 }
+
 .sk-folding-cube .sk-cube4:before {
   background-color: #363731;
 }
+
 .sk-folding-cube .sk-cube2:before {
   -webkit-animation-delay: 0.3s;
   animation-delay: 0.3s;
 }
+
 .sk-folding-cube .sk-cube3:before {
   -webkit-animation-delay: 0.6s;
   animation-delay: 0.6s;
 }
+
 .sk-folding-cube .sk-cube4:before {
   -webkit-animation-delay: 0.9s;
   animation-delay: 0.9s;
 }
+
 @-webkit-keyframes sk-foldCubeAngle {
+
   0%,
   10% {
     -webkit-transform: perspective(140px) rotateX(-180deg);
     transform: perspective(140px) rotateX(-180deg);
     opacity: 0;
   }
+
   25%,
   75% {
     -webkit-transform: perspective(140px) rotateX(0deg);
     transform: perspective(140px) rotateX(0deg);
     opacity: 1;
   }
+
   90%,
   100% {
     -webkit-transform: perspective(140px) rotateY(180deg);
@@ -298,23 +365,68 @@ h3 {
     opacity: 0;
   }
 }
+
 @keyframes sk-foldCubeAngle {
+
   0%,
   10% {
     -webkit-transform: perspective(140px) rotateX(-180deg);
     transform: perspective(140px) rotateX(-180deg);
     opacity: 0;
   }
+
   25%,
   75% {
     -webkit-transform: perspective(140px) rotateX(0deg);
     transform: perspective(140px) rotateX(0deg);
     opacity: 1;
   }
+
   90%,
   100% {
     -webkit-transform: perspective(140px) rotateY(180deg);
     transform: perspective(140px) rotateY(180deg);
     opacity: 0;
   }
+}
+
+#sendRecorder button {
+  background-color: #FF5252;
+}
+
+.btn-close {
+  border: 0;
+  width: auto;
+  height: auto;
+  position: absolute;
+  right: 8px;
+  background: none;
+}
+
+.fab {
+  font-family: Arial, sans-serif;
+  width: 56px;
+  height: 56px;
+  background-color: #F44336;
+  border-radius: 50%;
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+    0 1px 18px 0 rgba(0, 0, 0, 0.12),
+    0 3px 5px -1px rgba(0, 0, 0, 0.4);
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  transition: 0.3s;
+  text-align: center;
+  line-height: 56px;
+  /* this should be the same as the height of the button */
+}
+
+.fab:hover {
+  background-color: #FF5252;
+  cursor: pointer;
 }

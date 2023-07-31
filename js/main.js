@@ -150,6 +150,9 @@ var app = new Vue({
       else if (value === "record") {
         document.querySelector("input[name='routeName']").focus()
       }
+      else if (value === "view") {
+        this.checkPyramidComplete()
+      }
     },
     isConnected: function(value) {
       //only back up on reconnect and only if db is not empty
@@ -162,6 +165,9 @@ var app = new Vue({
     }
   },
   methods: {
+    recordMode() {
+      this.changeMode("record")
+    },
     changeClimbType(e, type) {
       e.preventDefault()
       app.climbType = type
@@ -314,6 +320,9 @@ var app = new Vue({
     },
     checkPyramidComplete: function() {
       console.log("CHECK PYRAMID")
+      if (!this.requirements.length) {
+        return
+      }
       var fulfilled = true
       for (var i = 0; i < this.requirements.length; i++) {
         var r = this.requirements[i]
@@ -449,7 +458,9 @@ var app = new Vue({
 
       this.db.insert(data)
       app.doBackup()
+      // TODO: this causes the v-model for selectedGrade to not work
       $('#sendRecorder')[0].reset()
+      this.changeMode("view")
     }
   },
 })
@@ -464,10 +475,10 @@ firebase.auth().onAuthStateChanged(function(user) {
       app.doInitialBackup()
       app.justRegistered = false
     }
-    app.changeMode("record")
+    app.changeMode("view")
     app.firebaseListen()
   }
   else {
-    app.mode = "landing"
+    app.changeMode("landing")
   }
 })
